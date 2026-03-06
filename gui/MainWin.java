@@ -2,7 +2,6 @@ package gui;
 
 import emporium.Emporium;
 
-import product.Item;
 import product.IceCreamFlavor;
 import product.MixInAmount;
 import product.MixInFlavor;
@@ -13,8 +12,6 @@ import product.Serving;
 import product.Order;
 
 import person.Customer;
-
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -36,28 +33,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-
 import java.awt.BorderLayout;
-import java.awt.DisplayMode;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
-
+import java.awt.Dimension;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.awt.GraphicsConfiguration;
 
 
 public class MainWin extends JFrame {
@@ -67,33 +50,18 @@ public class MainWin extends JFrame {
         createGui();
     }
 
-    private static List<Rectangle> getDisplays() {
-        return Arrays.stream(GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices())
-            .map(GraphicsDevice::getDefaultConfiguration)
-            // For scaled sizes use
-            .map(GraphicsConfiguration::getBounds)
-            // else:
-            //.map(c ->{
-            //    var dm = c.getDevice().getDisplayMode();
-            //    var bounds = c.getBounds();
-            //    return new Rectangle((int)bounds.getX(), (int)bounds.getY(), dm.getWidth(), dm.getHeight());
-            //})
-            .sorted(Comparator.comparing(Rectangle::getX))
-            .toList();
-    }
-
     private void createGui() {
-        List<Rectangle> displays = getDisplays();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        setSize(800,600);
-
-        setLocation(800, 540);
+        setDefaultLookAndFeelDecorated(true);
+        
+        setSize(800, 600);
+        setMinimumSize(new Dimension(800, 600));
+        // Center window
+        setLocationRelativeTo(null);
 
         createMenubar();
         createToolbar();
 
-        //Add display
         this.display = new JLabel();
         display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
         this.add(display,BorderLayout.CENTER);
