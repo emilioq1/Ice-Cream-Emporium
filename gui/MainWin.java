@@ -15,6 +15,7 @@ import person.Customer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -33,8 +34,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -53,9 +57,10 @@ public class MainWin extends JFrame {
     private void createGui() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setDefaultLookAndFeelDecorated(true);
-        
+
         setSize(800, 600);
         setMinimumSize(new Dimension(800, 600));
+
         // Center window
         setLocationRelativeTo(null);
 
@@ -64,7 +69,7 @@ public class MainWin extends JFrame {
 
         this.display = new JLabel();
         display.setLayout(new BoxLayout(display, BoxLayout.Y_AXIS));
-        this.add(display,BorderLayout.CENTER);
+        this.add(display, BorderLayout.CENTER);
 
         setOrderAvailability();
         setDirty(false);
@@ -73,16 +78,15 @@ public class MainWin extends JFrame {
     }
 
     private void createMenubar() {
-        //Create and add menubar to menu
+        // Create and add menubar to menu
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
 
-        //"File" menu
-        //Create "File" menu
+
+        // "File" menu
         JMenu file = new JMenu("File");
         menubar.add(file);
 
-        //Create menu items to menu "File"
         JMenuItem openMI = new JMenuItem("Open");
         openMI.addActionListener(event -> onOpenClick());
 
@@ -97,23 +101,21 @@ public class MainWin extends JFrame {
         JMenuItem quitMI = new JMenuItem("Quit");
         quitMI.addActionListener(event -> onQuitClick());
 
-        //Add menu items to menu "File"
         file.add(openMI);
         file.add(saveMI);
         file.add(saveAsMI);
         file.add(quitMI);
 
-        //"View" menu
-        //Create "View" menu
+
+        // "View" menu
         JMenu view = new JMenu("View");
         menubar.add(view);
 
-        //Create menu items for menu "View"
         JMenuItem viewCusMI = new JMenuItem("Customer");
-        viewCusMI.addActionListener(event ->view(Screen.CUSTOMERS));
+        viewCusMI.addActionListener(event -> view(Screen.CUSTOMERS));
 
         JMenuItem viewConMI = new JMenuItem("Container");
-        viewConMI.addActionListener(event ->view(Screen.CONTAINERS));
+        viewConMI.addActionListener(event -> view(Screen.CONTAINERS));
 
         JMenuItem viewIceMI = new JMenuItem("Ice Cream Flavor");
         viewIceMI.addActionListener(event -> view(Screen.ICE_CREAM_FLAVORS));
@@ -124,18 +126,17 @@ public class MainWin extends JFrame {
         JMenuItem viewOrdMI = new JMenuItem("Order");
         viewOrdMI.addActionListener(event -> view(Screen.ORDERS));
 
-        //Add menu items to menu "View"
         view.add(viewCusMI);
         view.add(viewConMI);
         view.add(viewIceMI);
         view.add(viewMixMI);
         view.add(viewOrdMI);
 
-        //"Create" menu
-        //Create menu "Create"
+
+        // "Create" menu
         JMenu create = new JMenu("Create");
         menubar.add(create);
-        //Create menu items for menu "Create"
+
         JMenuItem createCusMI = new JMenuItem("Customer");
         createCusMI.addActionListener(event -> onCreateCustomerClick());
 
@@ -152,14 +153,14 @@ public class MainWin extends JFrame {
         createOrdMI.addActionListener(event -> onCreateOrderClick());
         createOrdMI.setEnabled(false);
 
-        //Add menu items to menu "Create"
         create.add(createCusMI);
         create.add(createConMI);
         create.add(createIceMI);
         create.add(createMixMI);
         create.add(createOrdMI);
 
-        //Create and add help menu and its members to menubar
+
+        // Create and add help menu and its members to menubar
         JMenu help = new JMenu("Help");
         JMenuItem aboutMI = new JMenuItem("About");
         aboutMI.addActionListener(event -> onAboutClick());
@@ -168,30 +169,29 @@ public class MainWin extends JFrame {
     }
 
     private void createToolbar() {
-        //Create toolbar
-        JToolBar toolbar = new JToolBar();
-        toolbar.add(Box.createHorizontalStrut(25));
+        // Create toolbar
+        JToolBar toolbar = new JToolBar("Actions", SwingConstants.HORIZONTAL);
+        toolbar.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 4));
 
-        //Icons
-        //File related icons
+
+        // Icons
         ImageIcon saveIcon = new ImageIcon("./gui/icons/save.png");
         ImageIcon saveAsIcon = new ImageIcon("./gui/icons/saveas.png");
         ImageIcon openIcon = new ImageIcon("./gui/icons/open.png");
-        //Create related icons
-        ImageIcon createCusIcon = new ImageIcon("./gui/icons/create-customer.png");
-        ImageIcon createConIcon = new ImageIcon("./gui/icons/create-container.png");
-        ImageIcon createIceIcon = new ImageIcon("./gui/icons/create-ice-cream.png");
-        ImageIcon createMixIcon = new ImageIcon("./gui/icons/create-mixin.png");
-        ImageIcon createOrdIcon = new ImageIcon("./gui/icons/create-scoop.png");
-        //View related icons
-        ImageIcon viewCusIcon = new ImageIcon("./gui/icons/view-customer.png");
-        ImageIcon viewConIcon = new ImageIcon("./gui/icons/view-container.png");
-        ImageIcon viewIceIcon = new ImageIcon("./gui/icons/view-ice-cream.png");
-        ImageIcon viewMixIcon = new ImageIcon("./gui/icons/view-mixin.png");
-        ImageIcon viewOrdIcon = new ImageIcon("./gui/icons/view-scoop.png");
+        ImageIcon createCustomerIcon = new ImageIcon("./gui/icons/create-customer.png");
+        ImageIcon createContainerIcon = new ImageIcon("./gui/icons/create-container.png");
+        ImageIcon createIceCreamIcon = new ImageIcon("./gui/icons/create-ice-cream.png");
+        ImageIcon createMixinIcon = new ImageIcon("./gui/icons/create-mixin.png");
+        ImageIcon createScoopIcon = new ImageIcon("./gui/icons/create-scoop.png");
+        ImageIcon viewCustomerIcon = new ImageIcon("./gui/icons/view-customer.png");
+        ImageIcon viewContainerIcon = new ImageIcon("./gui/icons/view-container.png");
+        ImageIcon viewIceCreamIcon = new ImageIcon("./gui/icons/view-ice-cream.png");
+        ImageIcon viewMixinIcon = new ImageIcon("./gui/icons/view-mixin.png");
+        ImageIcon viewScoopIcon = new ImageIcon("./gui/icons/view-scoop.png");
 
-        //Buttons
-        //File buttons
+
+        // Buttons
+        // File buttons
         saveB = new JButton(saveIcon);
         saveB.setToolTipText("Save your session to default file");
         saveB.addActionListener(event -> onSaveClick());
@@ -204,196 +204,183 @@ public class MainWin extends JFrame {
         openB.setToolTipText("Load your session from file");
         openB.addActionListener(event -> onOpenClick());
 
-        //Create buttons
-        JButton createCusB = new JButton(createCusIcon);
+        // Create buttons
+        JButton createCusB = new JButton(createCustomerIcon);
         createCusB.setToolTipText("Create a customer");
         createCusB.addActionListener(event -> onCreateCustomerClick());
 
-        JButton createConB = new JButton(createConIcon);
+        JButton createConB = new JButton(createContainerIcon);
         createConB.setToolTipText("Create a container");
         createConB.addActionListener(event -> onCreateContainerClick());
 
-        JButton createIceB = new JButton(createIceIcon);
+        JButton createIceB = new JButton(createIceCreamIcon);
         createIceB.setToolTipText("Create an ice cream flavor");
         createIceB.addActionListener(event -> onCreateIceCreamFlavorClick());
 
-        JButton createMixB = new JButton(createMixIcon);
+        JButton createMixB = new JButton(createMixinIcon);
         createMixB.setToolTipText("Create a mix in flavor");
         createMixB.addActionListener(event -> onCreateMixInFlavorClick());
 
-        createOrdB = new JButton(createOrdIcon);
+        createOrdB = new JButton(createScoopIcon);
         createOrdB.setToolTipText("Create an order");
         createOrdB.addActionListener(event -> onCreateOrderClick());
         createOrdB.setEnabled(false);
 
-        //View buttons
-        JButton viewCusB = new JButton(viewCusIcon);
+        // View buttons
+        JButton viewCusB = new JButton(viewCustomerIcon);
         viewCusB.setToolTipText("View all customers");
         viewCusB.addActionListener(event -> view(Screen.CUSTOMERS));
 
-        JButton viewConB = new JButton(viewConIcon);
+        JButton viewConB = new JButton(viewContainerIcon);
         viewConB.setToolTipText("View all containers");
         viewConB.addActionListener(event -> view(Screen.CONTAINERS));
 
-        JButton viewIceB = new JButton(viewIceIcon);
+        JButton viewIceB = new JButton(viewIceCreamIcon);
         viewIceB.setToolTipText("View all ice cream flavors");
         viewIceB.addActionListener(event -> view(Screen.ICE_CREAM_FLAVORS));
 
-        JButton viewMixB = new JButton(viewMixIcon);
+        JButton viewMixB = new JButton(viewMixinIcon);
         viewMixB.setToolTipText("View all mix in flavors");
         viewMixB.addActionListener(event -> view(Screen.MIX_IN_FLAVORS));
 
-        JButton viewOrdB = new JButton(viewOrdIcon);
+        JButton viewOrdB = new JButton(viewScoopIcon);
         viewOrdB.setToolTipText("View all orders");
         viewOrdB.addActionListener(event -> view(Screen.ORDERS));
 
-        //Add buttons to toolbar
         toolbar.add(saveB);
         toolbar.add(saveAsB);
         toolbar.add(openB);
-
         toolbar.addSeparator();
-
         toolbar.add(createCusB);
         toolbar.add(createConB);
         toolbar.add(createIceB);
         toolbar.add(createMixB);
         toolbar.add(createOrdB);
-
         toolbar.addSeparator();
-
         toolbar.add(viewCusB);
         toolbar.add(viewConB);
         toolbar.add(viewIceB);
         toolbar.add(viewMixB);
         toolbar.add(viewOrdB);
-
         toolbar.addSeparator();
 
-        //Toolbar behavior
-        toolbar.add(Box.createHorizontalGlue());
+
         toolbar.setFloatable(false);
 
-        //Add toolbar
-        this.add(toolbar,BorderLayout.PAGE_START);
+        JScrollPane scrollPane = new JScrollPane(toolbar, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
     public void onOpenClick() {
         final JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files","mice");
+        FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files", "mice");
         chooser.addChoosableFileFilter(miceFiles);
         chooser.setFileFilter(miceFiles);
 
         int answer = chooser.showSaveDialog(this);
-        if(answer == JFileChooser.APPROVE_OPTION) {
+        if (answer == JFileChooser.APPROVE_OPTION) {
             filename = chooser.getSelectedFile();
 
-            try(BufferedReader rw = new BufferedReader(new FileReader(filename))) {
+            try (BufferedReader rw = new BufferedReader(new FileReader(filename))) {
                 String line = rw.readLine();
-                if(!line.equals(MAGIC_COOKIE)){
+                if (!line.equals(MAGIC_COOKIE)) {
                     throw new RuntimeException("Not a MICE file");
                 }
 
                 line = rw.readLine();
-                if(!(line.equals(FILE_VERSION))){
+                if (!(line.equals(FILE_VERSION))) {
                     throw new RuntimeException("Wrong MICE file version");
                 }
 
                 rw.readLine();
                 emporium = new Emporium(rw);
                 setDirty(true);
-            }
-            catch(IOException e) {
-                JOptionPane.showMessageDialog(this,"Unable to open" + filename + "\n" + e,"ERROR",JOptionPane.ERROR_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Unable to open" + filename + "\n" + e, "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
     }
 
-
-
     public void onSaveClick() {
-        if(filename == null) {
+        if (filename == null) {
             try {
                 filename = new File(System.getProperty("user.dir") + "/untitled.mice");
                 filename.createNewFile();
             }
 
-            catch(IOException e) {
-                JOptionPane.showMessageDialog(this,"Unable to open" + filename + "\n" + e,"ERROR",JOptionPane.ERROR_MESSAGE);
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Unable to open" + filename + "\n" + e, "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
             bw.write(MAGIC_COOKIE);
             bw.newLine();
             bw.write(FILE_VERSION);
             bw.newLine();
             emporium.save(bw);
-        }
-        catch(IOException e) {
-            JOptionPane.showMessageDialog(this,"Unable to open" + filename + "\n" + e,"ERROR",JOptionPane.ERROR_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Unable to open" + filename + "\n" + e, "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
     }
 
-
-
     public void onSaveAsClick() {
         final JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files","mice");
+        FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files", "mice");
         chooser.addChoosableFileFilter(miceFiles);
         chooser.setFileFilter(miceFiles);
 
         int answer = chooser.showSaveDialog(this);
 
-        if(answer == JFileChooser.APPROVE_OPTION) {
+        if (answer == JFileChooser.APPROVE_OPTION) {
             filename = chooser.getSelectedFile();
 
-            if(!miceFiles.accept(filename)) {
+            if (!miceFiles.accept(filename)) {
                 filename = new File(filename.getAbsolutePath() + ".mice");
             }
 
             onSaveClick();
-        }
-        else {
+        } else {
             return;
         }
     }
 
-
-
     public void onQuitClick() {
         System.exit(0);
     }
-
 
     public void onCreateCustomerClick() {
         JTextField name = new JTextField();
         JTextField phone = new JTextField();
 
         Object[] fields = {
-            "Name:", name,
-            "Phone:", phone,
+                "Name:", name,
+                "Phone:", phone,
         };
 
         int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    fields,
-                    "Create new Customer",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/customer.png") );
+                this,
+                fields,
+                "Create new Customer",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/customer.png"));
 
-        if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+        if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
         }
 
         String strName = name.getText();
         String strPhone = phone.getText();
 
-        Customer newCustomer = new Customer(strName,strPhone);
+        Customer newCustomer = new Customer(strName, strPhone);
         emporium.addCustomer(newCustomer);
 
         view(Screen.CUSTOMERS);
@@ -404,24 +391,24 @@ public class MainWin extends JFrame {
     public void onCreateContainerClick() {
         JTextField name = new JTextField();
         JTextField desc = new JTextField();
-        SpinnerNumberModel numModel = new SpinnerNumberModel(1,1,100,1);
+        SpinnerNumberModel numModel = new SpinnerNumberModel(1, 1, 100, 1);
         JSpinner maxScoops = new JSpinner(numModel);
 
         Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Max Scoops:", maxScoops
+                "Name:", name,
+                "Description:", desc,
+                "Max Scoops:", maxScoops
         };
 
         int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    fields,
-                    "Create new Container",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/container.png") );
+                this,
+                fields,
+                "Create new Container",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/container.png"));
 
-        if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+        if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
         }
 
@@ -429,7 +416,7 @@ public class MainWin extends JFrame {
         String strDesc = desc.getText();
         int intMaxScoops = (Integer) maxScoops.getValue();
 
-        Container newContainer = new Container(strName,strDesc,intMaxScoops);
+        Container newContainer = new Container(strName, strDesc, intMaxScoops);
         emporium.addContainer(newContainer);
 
         view(Screen.CONTAINERS);
@@ -437,32 +424,30 @@ public class MainWin extends JFrame {
         setOrderAvailability();
     }
 
-
-
     public void onCreateIceCreamFlavorClick() {
         JTextField name = new JTextField();
         JTextField desc = new JTextField();
-        SpinnerNumberModel priceModel = new SpinnerNumberModel(1,1,100,1);
-        SpinnerNumberModel costModel = new SpinnerNumberModel(1,1,100,1);
+        SpinnerNumberModel priceModel = new SpinnerNumberModel(1, 1, 100, 1);
+        SpinnerNumberModel costModel = new SpinnerNumberModel(1, 1, 100, 1);
         JSpinner price = new JSpinner(priceModel);
         JSpinner cost = new JSpinner(costModel);
 
         Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Price:", price,
-            "Cost:", cost
+                "Name:", name,
+                "Description:", desc,
+                "Price:", price,
+                "Cost:", cost
         };
 
         int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    fields,
-                    "Create New Ice Cream Flavor",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/ice-cream.png") );
+                this,
+                fields,
+                "Create New Ice Cream Flavor",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/ice-cream.png"));
 
-        if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+        if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
         }
 
@@ -471,7 +456,7 @@ public class MainWin extends JFrame {
         int priceInt = (Integer) price.getValue();
         int costInt = (Integer) cost.getValue();
 
-        IceCreamFlavor newFlavor = new IceCreamFlavor(strName,strDesc,priceInt,costInt);
+        IceCreamFlavor newFlavor = new IceCreamFlavor(strName, strDesc, priceInt, costInt);
         emporium.addIceCreamFlavor(newFlavor);
 
         view(Screen.ICE_CREAM_FLAVORS);
@@ -479,32 +464,30 @@ public class MainWin extends JFrame {
         setOrderAvailability();
     }
 
-
-
     public void onCreateMixInFlavorClick() {
         JTextField name = new JTextField();
         JTextField desc = new JTextField();
-        SpinnerNumberModel priceModel = new SpinnerNumberModel(1,1,100,1);
-        SpinnerNumberModel costModel = new SpinnerNumberModel(1,1,100,1);
+        SpinnerNumberModel priceModel = new SpinnerNumberModel(1, 1, 100, 1);
+        SpinnerNumberModel costModel = new SpinnerNumberModel(1, 1, 100, 1);
         JSpinner price = new JSpinner(priceModel);
         JSpinner cost = new JSpinner(costModel);
 
         Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Price:", price,
-            "Cost:", cost
+                "Name:", name,
+                "Description:", desc,
+                "Price:", price,
+                "Cost:", cost
         };
 
         int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    fields,
-                    "Create New MixIn Flavor",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/mixin.png") );
+                this,
+                fields,
+                "Create New MixIn Flavor",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/mixin.png"));
 
-        if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+        if (choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
         }
 
@@ -513,14 +496,12 @@ public class MainWin extends JFrame {
         int priceInt = (Integer) price.getValue();
         int costInt = (Integer) cost.getValue();
 
-        MixInFlavor newFlavor = new MixInFlavor(strName,strDesc,priceInt,costInt);
+        MixInFlavor newFlavor = new MixInFlavor(strName, strDesc, priceInt, costInt);
         emporium.addMixInFlavor(newFlavor);
 
         view(Screen.MIX_IN_FLAVORS);
         setDirty(true);
     }
-
-
 
     public MixIn onCreateMixIn(String object) {
         Object[] mixInFlavors = emporium.mixInFlavors();
@@ -532,46 +513,44 @@ public class MainWin extends JFrame {
         JComboBox<Object> mixInAmountsBox = new JComboBox<>(mixInAmounts);
 
         Object[] fields = {
-            object,
-            mixInFlavorLabel, mixInFlavorsBox,
-            mixInAmountLabel, mixInAmountsBox
+                object,
+                mixInFlavorLabel, mixInFlavorsBox,
+                mixInAmountLabel, mixInAmountsBox
         };
 
         int choice = JOptionPane.showConfirmDialog(
-                    this,
-                    fields,
-                    "Create New Mix In",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/mixin.png") );
+                this,
+                fields,
+                "Create New Mix In",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/mixin.png"));
 
-        if(choice == JOptionPane.NO_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+        if (choice == JOptionPane.NO_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return null;
         }
 
         MixInFlavor userMixInFlavor = (MixInFlavor) mixInFlavorsBox.getSelectedItem();
         MixInAmount userMixInAmount = (MixInAmount) mixInAmountsBox.getSelectedItem();
 
-        MixIn userMixIn = new MixIn(userMixInFlavor,userMixInAmount);
+        MixIn userMixIn = new MixIn(userMixInFlavor, userMixInAmount);
         return userMixIn;
     }
-
-
 
     public Scoop onCreateScoop() {
         Object[] iceFlavors = emporium.iceCreamFlavors();
         JLabel iceCreamFlavor = new JLabel("New Scoop?");
 
         Object choice = JOptionPane.showInputDialog(
-                    this,
-                    iceCreamFlavor,
-                    "Create new Scoop",
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/scoop.png"),
-                    iceFlavors,
-                    null );
+                this,
+                iceCreamFlavor,
+                "Create new Scoop",
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/scoop.png"),
+                iceFlavors,
+                null);
 
-        if(choice == null) {
+        if (choice == null) {
             return null;
         }
 
@@ -580,20 +559,20 @@ public class MainWin extends JFrame {
         Scoop userScoop = new Scoop(userIceFlavor);
         MixIn userMixIn = null;
 
-        while((emporium.mixInFlavors()).length > 0) {
+        while ((emporium.mixInFlavors()).length > 0) {
             userMixIn = onCreateMixIn("Add MixIn for: " + "\"" + userScoop.toString() + "\"\n\n");
 
-            if(userMixIn == null) {
+            if (userMixIn == null) {
                 break;
             }
             userScoop.addMixIn(userMixIn);
 
             int another = JOptionPane.showConfirmDialog(
-                        this,
-                        "Another Mix In for " + "\"" + userScoop + "\"",
-                        "Another Mix In",
-                        JOptionPane.YES_NO_OPTION);
-            if(another == JOptionPane.NO_OPTION) {
+                    this,
+                    "Another Mix In for " + "\"" + userScoop + "\"",
+                    "Another Mix In",
+                    JOptionPane.YES_NO_OPTION);
+            if (another == JOptionPane.NO_OPTION) {
                 break;
             }
         }
@@ -601,40 +580,38 @@ public class MainWin extends JFrame {
         return userScoop;
     }
 
-
-
     public Serving onCreateServing() {
         Object choice = new Object();
 
         Object[] containers = emporium.containers();
         JLabel containerLabel = new JLabel("Add Container?");
         choice = JOptionPane.showInputDialog(
-                    this,
-                    containerLabel,
-                    "Add new Serving",
-                    JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon("./gui/icons/unedited/scoop.png"),
-                    containers,
-                    null );
+                this,
+                containerLabel,
+                "Add new Serving",
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/scoop.png"),
+                containers,
+                null);
 
-        if(choice == null) {
+        if (choice == null) {
             return null;
         }
-        Container userContainer = (Container)choice;
+        Container userContainer = (Container) choice;
 
         Serving userServing = new Serving(userContainer);
         Scoop userScoop = null;
         int numScoops = 0;
         int maxScoops = userContainer.maxScoops();
 
-        while(numScoops < maxScoops) {
+        while (numScoops < maxScoops) {
             userScoop = onCreateScoop();
 
-            if(userScoop  == null && numScoops == 0) {
+            if (userScoop == null && numScoops == 0) {
                 return null;
             }
 
-            if(userScoop == null) {
+            if (userScoop == null) {
                 break;
             }
 
@@ -645,21 +622,20 @@ public class MainWin extends JFrame {
                     "Another scoop for: " + "\"" + userServing.toString() + "\"",
                     "Another scoop for serving?",
                     JOptionPane.YES_NO_OPTION);
-            if(another == JOptionPane.NO_OPTION || another == JOptionPane.CLOSED_OPTION) {
+            if (another == JOptionPane.NO_OPTION || another == JOptionPane.CLOSED_OPTION) {
                 break;
             }
 
         }
 
-
         // Toppings
         Object[] mixInFlavors = emporium.mixInFlavors();
         MixIn userMixIn = null;
 
-        while(mixInFlavors.length > 0) {
+        while (mixInFlavors.length > 0) {
             userMixIn = onCreateMixIn("Add Topping for: " + "\"" + userServing.toString() + "\"\n\n");
 
-            if(userMixIn == null) {
+            if (userMixIn == null) {
                 break;
             }
 
@@ -669,20 +645,18 @@ public class MainWin extends JFrame {
         return userServing;
     }
 
-
-
     public void onCreateOrderClick() {
         JLabel orders = new JLabel();
         Order userOrder = new Order();
         int howManyServe = 0;
 
-        while(true) {
+        while (true) {
             Serving userServing = onCreateServing();
-            if(howManyServe == 0 && userServing == null) {
+            if (howManyServe == 0 && userServing == null) {
                 return;
             }
 
-            if(userServing == null) {
+            if (userServing == null) {
                 break;
             }
 
@@ -691,139 +665,145 @@ public class MainWin extends JFrame {
 
             orders = new JLabel(userOrder.toString());
             int anotherOption = JOptionPane.showConfirmDialog(
-                        this,
-                        orders,
-                        "Another Serving?",
-                        JOptionPane.YES_NO_OPTION);
-            if(anotherOption == JOptionPane.NO_OPTION || anotherOption == JOptionPane.CLOSED_OPTION) {
+                    this,
+                    orders,
+                    "Another Serving?",
+                    JOptionPane.YES_NO_OPTION);
+            if (anotherOption == JOptionPane.NO_OPTION || anotherOption == JOptionPane.CLOSED_OPTION) {
                 break;
             }
         }
 
-        if(howManyServe > 0) {
+        if (howManyServe > 0) {
             emporium.addOrder(userOrder);
             view(Screen.ORDERS);
             setDirty(true);
         }
     }
 
-
-
     public void onAboutClick() {
-        JDialog about = new JDialog(this,"About");
+        JDialog about = new JDialog(this, "About");
         about.setLayout(new BoxLayout(about.getContentPane(), BoxLayout.X_AXIS));
 
         Canvas canvas = new Canvas();
         canvas.setAlignmentX(Canvas.LEFT_ALIGNMENT);
-        canvas.setBorder(new EmptyBorder(25,25,25,25));
-        //canvas.setLayout(new BorderLayout());
+        canvas.setBorder(new EmptyBorder(25, 25, 25, 25));
+        // canvas.setLayout(new BorderLayout());
         about.add(canvas);
 
-        about.setSize(200,200);
+        about.setSize(200, 200);
         about.setResizable(false);
         about.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        //canvas.setLayout(new BoxLayout(canvas,BoxLayout.Y_AXIS));
+        // canvas.setLayout(new BoxLayout(canvas,BoxLayout.Y_AXIS));
         about.pack();
 
         String aboutInfo = "<html>"
-                        + "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><hr>"
-                        + "<head><title><font size =+5><center>MICE</center></font></title></head>"
-                        + "<body>"
-                        + "<div style=\"text-align: center;\">"
-                        + "<font size =+1>Mavs Ice Cream Emporium</font>"
-                        + "</div><br>"
-                        + "Version 0.2"
-                        + "<br>"
-                        + "Copyright 2022 by Emilio Quinones"
-                        + "<br>"
-                        + "Licensed under GNU GPL 3.0"
-                        + "<br><hr>"
+                + "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><hr>"
+                + "<head><title><font size =+5><center>MICE</center></font></title></head>"
+                + "<body>"
+                + "<div style=\"text-align: center;\">"
+                + "<font size =+1>Mavs Ice Cream Emporium</font>"
+                + "</div><br>"
+                + "Version 0.2"
+                + "<br>"
+                + "Copyright 2022 by Emilio Quinones"
+                + "<br>"
+                + "Licensed under GNU GPL 3.0"
+                + "<br><hr>"
 
-                        + "Pictures used in code"
-                        + "<br><font size =-1> - Floppy Disk Icon by Those Icons, per the FlatIcon License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/save</font>"
+                + "Pictures used in code"
+                + "<br><font size =-1> - Floppy Disk Icon by Those Icons, per the FlatIcon License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/save</font>"
 
-                        + "<br><font size =-1> - File Open Icon by OpenClipart, per the Public Domain License:</font>"
-                        + "<br><font size =-3><https://freesvg.org/file-open-icon/font>"
+                + "<br><font size =-1> - File Open Icon by OpenClipart, per the Public Domain License:</font>"
+                + "<br><font size =-3><https://freesvg.org/file-open-icon/font>"
 
-                        + "<br><font size =-1> - Single Ice Cream Cone Icon by Good Ware, per the FlatIcon License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                + "<br><font size =-1> - Single Ice Cream Cone Icon by Good Ware, per the FlatIcon License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
 
-                        + "<br><font size =-1> - Chocolate Bar Icon by dDara, per the FlatIcon License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
+                + "<br><font size =-1> - Chocolate Bar Icon by dDara, per the FlatIcon License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
 
-                        + "<br><font size =-1> - Ice Cream Cup Icon by monkik, per the FlatIcon License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                + "<br><font size =-1> - Ice Cream Cup Icon by monkik, per the FlatIcon License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
 
-                        + "<br><font size =-1> - Container Glass Beaker Jar by OpenClipart-Vectors per Pixabay License:</font>"
-                        + "<br><font size =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
+                + "<br><font size =-1> - Container Glass Beaker Jar by OpenClipart-Vectors per Pixabay License:</font>"
+                + "<br><font size =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
 
-                        + "<br><font size =-1> - User icon silhouette by OpenClipart per Public Domain:</font>"
-                        + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
+                + "<br><font size =-1> - User icon silhouette by OpenClipart per Public Domain:</font>"
+                + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
 
-                        + "<br><font size =-1> - Logo Icon by OpenClipart, per the Public Domain License:</font>"
-                        + "<br><font size =-3>https://freesvg.org/gerald-g-soft-ice-cream-cones-ff-menu</font>"
+                + "<br><font size =-1> - Logo Icon by OpenClipart, per the Public Domain License:</font>"
+                + "<br><font size =-3>https://freesvg.org/gerald-g-soft-ice-cream-cones-ff-menu</font>"
 
-                        + "<br><font size =-1> - Eye Icon by OpenClipart, per the FlatIcon License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
+                + "<br><font size =-1> - Eye Icon by OpenClipart, per the FlatIcon License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
-                        + "<br><font size =-1> - Open icon by IconKanan, per Public Domain License:</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/share</font>"
+                + "<br><font size =-1> - Open icon by IconKanan, per Public Domain License:</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/share</font>"
 
-                        + "<br><font size =-1> - Create icon by Ilham Fitrotul Hayat, per the FlatIcon License</font>"
-                        + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
+                + "<br><font size =-1> - Create icon by Ilham Fitrotul Hayat, per the FlatIcon License</font>"
+                + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
 
+                // + "<br><font size =-1> - Single Ice Cream Cone with Create Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
 
-                        // + "<br><font size =-1> - Single Ice Cream Cone with Create Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
+                // + "<br><font size =-1> - Chocolate Bar with Create Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
 
-                        // + "<br><font size =-1> - Chocolate Bar with Create Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
+                // + "<br><font size =-1> - Ice Cream Cup with Create Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
 
-                        // + "<br><font size =-1> - Ice Cream Cup with Create Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
+                // + "<br><font size =-1> - Container Glass Beaker Jar with Create Icon by
+                // Emilio Quinones:</font>"
+                // + "<br><font size
+                // =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
 
-                        // + "<br><font size =-1> - Container Glass Beaker Jar with Create Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/create</font>"
+                // + "<br><font size =-1> - User icon silhouette with Create Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
-                        // + "<br><font size =-1> - User icon silhouette with Create Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
+                // + "<br><font size =-1> - Single Ice Cream Cone with Eye Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
+                // + "<br><font size =-1> - Chocolate Bar with Eye Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
+                // + "<br><font size =-1> - Ice Cream Cup with Eye Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
-                        // + "<br><font size =-1> - Single Ice Cream Cone with Eye Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
+                // + "<br><font size =-1> - Container Glass Beaker Jar with Eye Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size
+                // =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
-                        // + "<br><font size =-1> - Chocolate Bar with Eye Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/chocolate</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
+                // + "<br><font size =-1> - User icon silhouette with Eye Icon by Emilio
+                // Quinones:</font>"
+                // + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
+                // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
 
-                        // + "<br><font size =-1> - Ice Cream Cup with Eye Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/ice-cream</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
+                // +https://svgsilh.com/image/151611.html
+                + "</br></body></html>";
 
-                        // + "<br><font size =-1> - Container Glass Beaker Jar with Eye Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://pixabay.com/vectors/jar-glass-beaker-container-151611/</font>"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
-
-                        // + "<br><font size =-1> - User icon silhouette with Eye Icon by Emilio Quinones:</font>"
-                        // + "<br><font size =-3>https://freesvg.org/user-icon-silhouette"
-                        // + "<br><font size =-3>https://www.flaticon.com/free-icons/eye</font>"
-
-
-                        //+https://svgsilh.com/image/151611.html
-                        + "</br></body></html>";
-
-                JPanel text = new JPanel();
-                text.setLayout(new BoxLayout(text, BoxLayout.X_AXIS));
-                JLabel info = new JLabel(aboutInfo, JLabel.CENTER);
+        JPanel text = new JPanel();
+        text.setLayout(new BoxLayout(text, BoxLayout.X_AXIS));
+        JLabel info = new JLabel(aboutInfo, JLabel.CENTER);
         canvas.add(info);
         about.add(canvas);
         about.add(Box.createVerticalStrut(100));
