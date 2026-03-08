@@ -25,7 +25,7 @@ public class Emporium {
             orders = new ArrayList<Order>();
             customers = new ArrayList<Customer>();
         }
-        
+
         public Emporium(BufferedReader in) throws IOException {
             this();
             IceCreamFlavor ice;
@@ -34,13 +34,13 @@ public class Emporium {
                 Order ord;
 
                 in.readLine();
-                int num = Integer.parseInt(in.readLine()); 
+                int num = Integer.parseInt(in.readLine());
                 for(int i = 0; i < num; i++) {
                         ice = new IceCreamFlavor(in);
                         iceCreamFlavors.add(ice);
                         in.readLine();
                 }
-                
+
                 in.readLine();
                 num = Integer.parseInt(in.readLine());
                 for(int i = 0; i < num; i++) {
@@ -48,7 +48,7 @@ public class Emporium {
                         mixInFlavors.add(mix);
                         in.readLine();
                 }
-                
+
                 in.readLine();
                 in.readLine();
                 num = Integer.parseInt(in.readLine());
@@ -57,7 +57,7 @@ public class Emporium {
                         containers.add(con);
                         in.readLine();
                 }
-                
+
                 in.readLine();
                 in.readLine();
                 num = Integer.parseInt(in.readLine());
@@ -66,32 +66,32 @@ public class Emporium {
                         orders.add(ord);
                         in.readLine();
                 }
-                
+
         }
-        
+
         public void save(BufferedWriter out) throws IOException {
                 out.write("IceCreamFlavors"); out.newLine();
                 out.write("" + iceCreamFlavors.size()); out.newLine();
-                
+
                 for(IceCreamFlavor i : iceCreamFlavors) {
                         i.save(out); out.newLine();
                         out.write("---ICECREAMFLAVOREND---"); out.newLine();
                 } out.newLine();
-                
+
                 out.write("MixInFlavors"); out.newLine();
                 out.write("" + mixInFlavors.size()); out.newLine();
                 for(MixInFlavor m : mixInFlavors) {
                         m.save(out); out.newLine();
                         out.write("---MIXINFLAVOREND---"); out.newLine();
                 } out.newLine();
-                
+
                 out.write("Containers"); out.newLine();
                 out.write("" + containers.size()); out.newLine();
                 for(Container c : containers) {
                         c.save(out); out.newLine();
                         out.write("---CONTAINEREND---"); out.newLine();
                 } out.newLine();
-                
+
                 out.write("Orders"); out.newLine();
                 out.write("" + orders.size()); out.newLine();
                 for(Order o : orders) {
@@ -107,7 +107,7 @@ public class Emporium {
         public void addIceCreamFlavor(IceCreamFlavor flavor) {
                 iceCreamFlavors.add(flavor);
         }
-        
+
         public void addMixInFlavor(MixInFlavor flavor) {
                 mixInFlavors.add(flavor);
         }
@@ -115,7 +115,7 @@ public class Emporium {
         public void addContainer(Container container) {
                 containers.add(container);
         }
-        
+
         public void addOrder(Order order) {
                 orders.add(order);
         }
@@ -131,11 +131,11 @@ public class Emporium {
         public Object[] containers() {
                 return containers.toArray();
         }
-        
+
         public Object[] customers() {
                 return customers.toArray();
         }
-        
+
         public Object[] orders() {
                 return orders.toArray();
         }
