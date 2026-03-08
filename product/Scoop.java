@@ -15,8 +15,8 @@ public class Scoop {
 
     public Scoop(BufferedReader in) throws IOException {
         this.flavor = new IceCreamFlavor(in);
-	mixins = new ArrayList<MixIn>();
-	MixIn mixin;
+        mixins = new ArrayList<MixIn>();
+        MixIn mixin;
 
         in.readLine();
         int numMixIn = Integer.parseInt(in.readLine());
@@ -52,22 +52,22 @@ public class Scoop {
         }
 
         StringBuilder s = new StringBuilder();
-	String delimiter = ", ";
-		
-	s.append(flavor).append(" with ");
-	for(MixIn m : mixins) {
-		s.append(m).append(delimiter);
-	}
-	s.deleteCharAt(s.length() - delimiter.length());
-	
-	return s.toString();
+        String delimiter = ", ";
+
+        s.append(flavor).append(" with ");
+        for(MixIn m : mixins) {
+            s.append(m).append(delimiter);
+        }
+        s.deleteCharAt(s.length() - delimiter.length());
+
+        return s.toString();
     }
 
     public int price() {
         int icePrice = 0;
         int mixInPrice = 0;
         int price = 0;
-        
+
         price += flavor.price();
         for(MixIn m : mixins) {
             price += m.price();

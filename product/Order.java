@@ -8,27 +8,33 @@ import java.io.IOException;
 
 import person.Customer;
 
+
 public class Order {
     public Order() {
         this.customer = null;
         servings = new ArrayList<>();
     }
 
-
     public Order(Customer customer) {
         this.customer = customer;
         servings = new ArrayList<>();
     }
 
+    public Order(Customer customer, ArrayList<Serving> s) {
+        this.customer = customer;
+        this.servings = s;
+    }
+
     public Order(BufferedReader in) throws IOException {
         Customer customer = new Customer(in);
-        this(customer);
-        
+        ArrayList<Serving> servs = new ArrayList<Serving>();
+
         int numServing = Integer.parseInt(in.readLine());
         for(int i = 0; i < numServing; i++) {
-            Serving serving = new Serving(in);
-            servings.add(serving);
+            servs.add(new Serving(in));
         }
+
+        this(customer, servs);
     }
 
     public void save(BufferedWriter out) throws IOException {
@@ -66,7 +72,7 @@ public class Order {
         for(Serving s : servings) {
             price += s.price();
         }
-        
+
         return price;
     }
 

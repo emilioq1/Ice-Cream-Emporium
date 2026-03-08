@@ -2,8 +2,5 @@ package product;
 
 
 public enum MixInAmount {
-	Light,
-	Normal,
-	Extra,
-	Drenched
+    Light, Normal, Extra, Drenched
 }

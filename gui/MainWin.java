@@ -46,6 +46,7 @@ import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+
 public class MainWin extends JFrame {
     public MainWin(String title) {
         super(title);
@@ -243,19 +244,19 @@ public class MainWin extends JFrame {
         toolbar.add(saveB);
         toolbar.add(saveAsB);
         toolbar.add(openB);
-        toolbar.addSeparator();
+        toolbar.addSeparator(new Dimension(5, 100));
         toolbar.add(createCusB);
         toolbar.add(createConB);
         toolbar.add(createIceB);
         toolbar.add(createMixB);
         toolbar.add(createOrdB);
-        toolbar.addSeparator();
+        toolbar.addSeparator(new Dimension(5, 100));
         toolbar.add(viewCusB);
         toolbar.add(viewConB);
         toolbar.add(viewIceB);
         toolbar.add(viewMixB);
         toolbar.add(viewOrdB);
-        toolbar.addSeparator();
+        toolbar.addSeparator(new Dimension(5, 100));
 
         toolbar.setFloatable(false);
 
@@ -279,9 +280,10 @@ public class MainWin extends JFrame {
 
             try(BufferedReader rw = new BufferedReader(new FileReader(file))) {
                 String line = rw.readLine();
-                System.out.println(line);
                 if(!line.equals(MAGIC_COOKIE)) {
-                    JOptionPane.showMessageDialog(this, String.format("\"%s\" is not a MICE file.", filename),
+                    JOptionPane.showMessageDialog(
+                            this,
+                            String.format("\"%s\" is not a MICE file.", filename),
                             "Open Error",
                             JOptionPane.ERROR_MESSAGE);
 
@@ -289,28 +291,30 @@ public class MainWin extends JFrame {
                 }
 
                 line = rw.readLine();
-                System.out.println(line);
                 if(!(line.equals(FILE_VERSION))) {
-                    JOptionPane.showMessageDialog(this,
-                            String.format("\"%s\" has the wrong MICE file version.", filename), "Open Error",
+                    JOptionPane.showMessageDialog(
+                            this,
+                            String.format("\"%s\" has the wrong MICE file version.", filename),
+                            "Open Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 rw.readLine();
-                System.out.println(line);
                 emporium = new Emporium(rw);
                 setDirty(true);
             }
             catch(IOException e) {
-                JOptionPane.showMessageDialog(this, "Unable to open" + file + "\n" + e, "Open Error",
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Unable to open" + file + "\n" + e,
+                        "Open Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
         else if(returnValue == JFileChooser.ERROR_OPTION) {
-            JOptionPane.showMessageDialog(this, "An error has occurred.", "Open Error",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "An error has occurred.", "Open Error", JOptionPane.ERROR_MESSAGE);
         }
 
         return;
@@ -319,7 +323,10 @@ public class MainWin extends JFrame {
     public void onSaveClick() {
         if(file == null) {
             if(onSaveAsClick() != 0) {
-                JOptionPane.showMessageDialog(this, "You must create a new file to save session.", "Save Error",
+                JOptionPane.showMessageDialog(
+                        this,
+                        "You must create a new file to save session.",
+                        "Save Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -333,7 +340,10 @@ public class MainWin extends JFrame {
             emporium.save(bw);
         }
         catch(IOException e) {
-            JOptionPane.showMessageDialog(this, "Unable to save " + file + "\n" + e, "Save Error",
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Unable to save " + file + "\n" + e,
+                    "Save Error",
                     JOptionPane.ERROR_MESSAGE);
         }
 
@@ -371,19 +381,15 @@ public class MainWin extends JFrame {
         JTextField name = new JTextField();
         JTextField phone = new JTextField();
 
-        Object[] fields = {
-            "Name:", name,
-            "Phone:", phone,
-        };
+        Object[] fields = { "Name:", name, "Phone:", phone, };
 
         int choice = JOptionPane.showConfirmDialog(
-            this,
-            fields,
-            "Create new Customer",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/customer.png")
-        );
+                this,
+                fields,
+                "Create new Customer",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/customer.png"));
 
         if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
@@ -406,20 +412,15 @@ public class MainWin extends JFrame {
         SpinnerNumberModel numModel = new SpinnerNumberModel(1, 1, 100, 1);
         JSpinner maxScoops = new JSpinner(numModel);
 
-        Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Max Scoops:", maxScoops
-        };
+        Object[] fields = { "Name:", name, "Description:", desc, "Max Scoops:", maxScoops };
 
         int choice = JOptionPane.showConfirmDialog(
-            this,
-            fields,
-            "Create new Container",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/container.png")
-        );
+                this,
+                fields,
+                "Create new Container",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/container.png"));
 
         if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
@@ -445,21 +446,15 @@ public class MainWin extends JFrame {
         JSpinner price = new JSpinner(priceModel);
         JSpinner cost = new JSpinner(costModel);
 
-        Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Price:", price,
-            "Cost:", cost
-        };
+        Object[] fields = { "Name:", name, "Description:", desc, "Price:", price, "Cost:", cost };
 
         int choice = JOptionPane.showConfirmDialog(
-            this,
-            fields,
-            "Create New Ice Cream Flavor",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/ice-cream.png")
-        );
+                this,
+                fields,
+                "Create New Ice Cream Flavor",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/ice-cream.png"));
 
         if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
@@ -486,21 +481,15 @@ public class MainWin extends JFrame {
         JSpinner price = new JSpinner(priceModel);
         JSpinner cost = new JSpinner(costModel);
 
-        Object[] fields = {
-            "Name:", name,
-            "Description:", desc,
-            "Price:", price,
-            "Cost:", cost
-        };
+        Object[] fields = { "Name:", name, "Description:", desc, "Price:", price, "Cost:", cost };
 
         int choice = JOptionPane.showConfirmDialog(
-            this,
-            fields,
-            "Create New MixIn Flavor",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/mixin.png")
-        );
+                this,
+                fields,
+                "Create New MixIn Flavor",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/mixin.png"));
 
         if(choice == JOptionPane.CANCEL_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return;
@@ -527,27 +516,22 @@ public class MainWin extends JFrame {
         JComboBox<Object> mixInFlavorsBox = new JComboBox<>(mixInFlavors);
         JComboBox<Object> mixInAmountsBox = new JComboBox<>(mixInAmounts);
 
-        Object[] fields = {
-            object,
-            mixInFlavorLabel, mixInFlavorsBox,
-            mixInAmountLabel, mixInAmountsBox
-        };
+        Object[] fields = { object, mixInFlavorLabel, mixInFlavorsBox, mixInAmountLabel, mixInAmountsBox };
 
         int choice = JOptionPane.showConfirmDialog(
-            this,
-            fields,
-            "Create New Mix In",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/mixin.png")
-        );
+                this,
+                fields,
+                "Create New Mix In",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/mixin.png"));
 
         if(choice == JOptionPane.NO_OPTION || choice == JOptionPane.CLOSED_OPTION) {
             return null;
         }
 
-        MixInFlavor userMixInFlavor = (MixInFlavor) mixInFlavorsBox.getSelectedItem();
-        MixInAmount userMixInAmount = (MixInAmount) mixInAmountsBox.getSelectedItem();
+        MixInFlavor userMixInFlavor = (MixInFlavor)mixInFlavorsBox.getSelectedItem();
+        MixInAmount userMixInAmount = (MixInAmount)mixInAmountsBox.getSelectedItem();
 
         MixIn userMixIn = new MixIn(userMixInFlavor, userMixInAmount);
         return userMixIn;
@@ -558,14 +542,13 @@ public class MainWin extends JFrame {
         JLabel iceCreamFlavor = new JLabel("New Scoop?");
 
         Object choice = JOptionPane.showInputDialog(
-            this,
-            iceCreamFlavor,
-            "Create new Scoop",
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/scoop.png"),
-            iceFlavors,
-            null
-        );
+                this,
+                iceCreamFlavor,
+                "Create new Scoop",
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/scoop.png"),
+                iceFlavors,
+                null);
 
         if(choice == null) {
             return null;
@@ -585,11 +568,10 @@ public class MainWin extends JFrame {
             userScoop.addMixIn(userMixIn);
 
             int another = JOptionPane.showConfirmDialog(
-                this,
-                "Another Mix In for " + "\"" + userScoop + "\"",
-                "Another Mix In",
-                JOptionPane.YES_NO_OPTION
-            );
+                    this,
+                    "Another Mix In for " + "\"" + userScoop + "\"",
+                    "Another Mix In",
+                    JOptionPane.YES_NO_OPTION);
 
             if(another == JOptionPane.NO_OPTION) {
                 break;
@@ -605,14 +587,13 @@ public class MainWin extends JFrame {
         Object[] containers = emporium.containers();
         JLabel containerLabel = new JLabel("Add Container?");
         choice = JOptionPane.showInputDialog(
-            this,
-            containerLabel,
-            "Add new Serving",
-            JOptionPane.QUESTION_MESSAGE,
-            new ImageIcon("./gui/icons/unedited/scoop.png"),
-            containers,
-            null
-        );
+                this,
+                containerLabel,
+                "Add new Serving",
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/scoop.png"),
+                containers,
+                null);
 
         if(choice == null) {
             return null;
@@ -639,11 +620,10 @@ public class MainWin extends JFrame {
             ++numScoops;
 
             int another = JOptionPane.showConfirmDialog(
-                this,
-                "Another scoop for: " + "\"" + userServing.toString() + "\"",
-                "Another scoop for serving?",
-                JOptionPane.YES_NO_OPTION
-            );
+                    this,
+                    "Another scoop for: " + "\"" + userServing.toString() + "\"",
+                    "Another scoop for serving?",
+                    JOptionPane.YES_NO_OPTION);
 
             if(another == JOptionPane.NO_OPTION || another == JOptionPane.CLOSED_OPTION) {
                 break;
@@ -669,8 +649,20 @@ public class MainWin extends JFrame {
 
     public void onCreateOrderClick() {
         JLabel orders = new JLabel();
-        Order userOrder = new Order();
         int howManyServe = 0;
+
+        Object choice = JOptionPane.showInputDialog(
+                this,
+                new JLabel("Who is ordering?"),
+                "Pick customer",
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon("./gui/icons/unedited/customer.png"),
+                emporium.customers(),
+                null);
+        if(choice == null) {
+            return;
+        }
+        Order userOrder = new Order(((Customer)choice));
 
         while(true) {
             Serving userServing = onCreateServing();
@@ -686,11 +678,8 @@ public class MainWin extends JFrame {
             ++howManyServe;
 
             orders = new JLabel(userOrder.toString());
-            int anotherOption = JOptionPane.showConfirmDialog(
-                    this,
-                    orders,
-                    "Another Serving?",
-                    JOptionPane.YES_NO_OPTION);
+            int anotherOption = JOptionPane
+                    .showConfirmDialog(this, orders, "Another Serving?", JOptionPane.YES_NO_OPTION);
             if(anotherOption == JOptionPane.NO_OPTION || anotherOption == JOptionPane.CLOSED_OPTION) {
                 break;
             }
@@ -720,18 +709,10 @@ public class MainWin extends JFrame {
         // canvas.setLayout(new BoxLayout(canvas,BoxLayout.Y_AXIS));
         about.pack();
 
-        String aboutInfo = "<html>"
-                + "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><hr>"
-                + "<head><title><font size =+5><center>MICE</center></font></title></head>"
-                + "<body>"
-                + "<div style=\"text-align: center;\">"
-                + "<font size =+1>Mavs Ice Cream Emporium</font>"
-                + "</div><br>"
-                + "Version 0.2"
-                + "<br>"
-                + "Copyright 2022 by Emilio Quinones"
-                + "<br>"
-                + "Licensed under GNU GPL 3.0"
+        String aboutInfo = "<html>" + "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><hr>"
+                + "<head><title><font size =+5><center>MICE</center></font></title></head>" + "<body>"
+                + "<div style=\"text-align: center;\">" + "<font size =+1>Mavs Ice Cream Emporium</font>" + "</div><br>"
+                + "Version 0.2" + "<br>" + "Copyright 2022 by Emilio Quinones" + "<br>" + "Licensed under GNU GPL 3.0"
                 + "<br><hr>"
 
                 + "Pictures used in code"
@@ -842,21 +823,21 @@ public class MainWin extends JFrame {
         if(screen == Screen.CONTAINERS) {
             title = "Containers" + newLine;
             for(Object s : emporium.containers()) {
-                finalString.append(((Container) s).toString() + newLine);
+                finalString.append(((Container)s).toString() + newLine);
             }
         }
 
         if(screen == Screen.ICE_CREAM_FLAVORS) {
             title = "Ice Cream Flavors" + newLine;
             for(Object s : emporium.iceCreamFlavors()) {
-                finalString.append(((IceCreamFlavor) s).toString() + newLine);
+                finalString.append(((IceCreamFlavor)s).toString() + newLine);
             }
         }
 
         if(screen == Screen.MIX_IN_FLAVORS) {
             title = "Mix In Flavors" + newLine;
             for(Object s : emporium.mixInFlavors()) {
-                finalString.append(((MixInFlavor) s).toString() + newLine);
+                finalString.append(((MixInFlavor)s).toString() + newLine);
             }
         }
 
@@ -864,16 +845,15 @@ public class MainWin extends JFrame {
             title = "Orders" + newLine;
             for(Object s : emporium.orders()) {
                 finalString.append(
-                        "Order " + ++i + " $" + ((Order) s).price() + "for " + ((Order) s).getCustomer() + newLine);
-                finalString.append(((Order) s).toString() + newLine);
+                        "Order " + ++i + " $" + ((Order)s).price() + "for " + ((Order)s).getCustomer() + newLine);
+                finalString.append(((Order)s).toString() + newLine);
             }
             i = 0;
         }
 
         display.setText(
-                "<html><font size =+5><b><u>" + title +
-                        "</u></b></font>" + "<font size=+2>" + finalString.toString() +
-                        "</font></html>");
+                "<html><font size =+5><b><u>" + title + "</u></b></font>" + "<font size=+2>" + finalString.toString()
+                        + "</font></html>");
     }
 
     private void setDirty(boolean isDirty) {
@@ -914,10 +894,6 @@ public class MainWin extends JFrame {
     private File file;
 
     private enum Screen {
-        CUSTOMERS,
-        CONTAINERS,
-        ICE_CREAM_FLAVORS,
-        MIX_IN_FLAVORS,
-        ORDERS
+        CUSTOMERS, CONTAINERS, ICE_CREAM_FLAVORS, MIX_IN_FLAVORS, ORDERS
     }
 }

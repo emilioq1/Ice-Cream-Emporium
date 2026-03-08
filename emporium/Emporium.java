@@ -1,10 +1,7 @@
 package emporium;
 
-import product.Item;
 import product.IceCreamFlavor;
-import product.MixInAmount;
 import product.MixInFlavor;
-import product.MixIn;
 import product.Container;
 import product.Order;
 
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+
 
 public class Emporium {
     public Emporium() {
@@ -27,96 +25,97 @@ public class Emporium {
 
     public Emporium(BufferedReader in) throws IOException {
         this();
-        IceCreamFlavor ice;
-        MixInFlavor mix;
-        Container con;
-        Order ord;
+        String line = new String();
+        int num = -1;
 
-        in.readLine();
-        int num = Integer.parseInt(in.readLine());
-        for (int i = 0; i < num; i++) {
-            ice = new IceCreamFlavor(in);
-            iceCreamFlavors.add(ice);
-            in.readLine();
+        while((line = in.readLine()) != null) {
+            switch(line) {
+                case "IceCreamFlavors":
+                    line = in.readLine();
+                    num = Integer.parseInt(line);
+
+                    for(int i = 0; i < num; i++) {
+                        iceCreamFlavors.add(new IceCreamFlavor(in));
+                        line = in.readLine();
+                    }
+
+                    break;
+                case "MixInFlavors":
+                    line = in.readLine();
+                    num = Integer.parseInt(line);
+
+                    for(int i = 0; i < num; i++) {
+                        mixInFlavors.add(new MixInFlavor(in));
+                        line = in.readLine();
+                    }
+
+                    break;
+                case "Containers":
+                    line = in.readLine();
+                    num = Integer.parseInt(line);
+
+                    for(int i = 0; i < num; i++) {
+                        containers.add(new Container(in));
+                        line = in.readLine();
+                    }
+
+                    break;
+                case "Orders":
+                    line = in.readLine();
+                    num = Integer.parseInt(line);
+
+                    for(int i = 0; i < num; i++) {
+                        orders.add(new Order(in));
+                        line = in.readLine();
+                    }
+
+                    break;
+                default:
+                    break;
+            }
         }
-
-        in.readLine();
-        num = Integer.parseInt(in.readLine());
-        for (int i = 0; i < num; i++) {
-            mix = new MixInFlavor(in);
-            mixInFlavors.add(mix);
-            in.readLine();
-        }
-
-        in.readLine();
-        in.readLine();
-        num = Integer.parseInt(in.readLine());
-        for (int i = 0; i < num; i++) {
-            con = new Container(in);
-            containers.add(con);
-            in.readLine();
-        }
-
-        in.readLine();
-        in.readLine();
-        num = Integer.parseInt(in.readLine());
-        for (int i = 0; i < num; i++) {
-            ord = new Order(in);
-            orders.add(ord);
-            in.readLine();
-        }
-
     }
 
     public void save(BufferedWriter out) throws IOException {
+        // Ice Cream Flavors: Name, Description, Price, Cost
+        // Mix In Flavors: Name, Description, Price, Cost
+        // Containers: Name, Description, Max Scoops
+        // Orders: Customer, Servings
         out.write("IceCreamFlavors");
         out.newLine();
         out.write("" + iceCreamFlavors.size());
         out.newLine();
-
-        for (IceCreamFlavor i : iceCreamFlavors) {
+        for(IceCreamFlavor i : iceCreamFlavors) {
             i.save(out);
             out.newLine();
-            out.write("---ICECREAMFLAVOREND---");
-            out.newLine();
         }
-        out.newLine();
 
         out.write("MixInFlavors");
         out.newLine();
         out.write("" + mixInFlavors.size());
         out.newLine();
-        for (MixInFlavor m : mixInFlavors) {
+        for(MixInFlavor m : mixInFlavors) {
             m.save(out);
             out.newLine();
-            out.write("---MIXINFLAVOREND---");
-            out.newLine();
         }
-        out.newLine();
 
         out.write("Containers");
         out.newLine();
         out.write("" + containers.size());
         out.newLine();
-        for (Container c : containers) {
+        for(Container c : containers) {
             c.save(out);
             out.newLine();
-            out.write("---CONTAINEREND---");
-            out.newLine();
         }
-        out.newLine();
 
         out.write("Orders");
         out.newLine();
         out.write("" + orders.size());
         out.newLine();
-        for (Order o : orders) {
+        for(Order o : orders) {
             o.save(out);
             out.newLine();
-            out.write("---ORDEREND---");
-            out.newLine();
         }
-        out.newLine();
     }
 
     public void addCustomer(Customer customer) {

@@ -17,44 +17,45 @@ public class Serving {
     public Serving(BufferedReader in) throws IOException {
         scoops = new ArrayList<Scoop>();
         toppings = new ArrayList<MixIn>();
-        Scoop scoop;
-        MixIn topping;
-        
-        in.readLine();
-        in.readLine();
+
+        // Read Serving
+        String line = in.readLine();
+        if(line != "Serving") throw new IOException("Wrong part of file.");
+
+        line = in.readLine();
+        if(line != "Container") throw new IOException("Not at \"Container\".");
         this.container = new Container(in);
-        
-        in.readLine();
-        in.readLine();
-        in.readLine();
-        int numScoops = Integer.parseInt(in.readLine());
+
+        line = in.readLine();
+        if(line != "Scoops") throw new IOException("Not at \"Scoops\".");
+        line = in.readLine();
+
+        int numScoops = Integer.parseInt(line);
         for(int i = 0; i < numScoops; i++) {
-            scoop = new Scoop(in);
-            scoops.add(scoop);
-            in.readLine();
+            scoops.add(new Scoop(in));
+            line = in.readLine();
         }
-        
-        in.readLine();
-        int numToppings = Integer.parseInt(in.readLine());
+
+        if(line != "Toppings") throw new IOException("Not at \"Toppings\".");
+        line = in.readLine();
+
+        int numToppings = Integer.parseInt(line);
         for(int i = 0; i < numToppings; i++) {
-            topping = new MixIn(in);
-            toppings.add(topping);
-            in.readLine();
+            toppings.add(new MixIn(in));
+            line = in.readLine();
         }
     }
-    
+
     public void save(BufferedWriter out) throws IOException {
-        out.write("SERVING");
+        out.write("Serving");
         out.newLine();
-        
+
         out.write("Container");
         out.newLine();
         container.save(out);
         out.newLine();
-        out.write("--CONTAINEREND--");
-        out.newLine();
 
-        out.write("Scoop");
+        out.write("Scoops");
         out.newLine();
         out.write("" + scoops.size());
         out.newLine();
@@ -62,11 +63,9 @@ public class Serving {
         for(Scoop s : scoops) {
             s.save(out);
             out.newLine();
-            out.write("--SCOOPEND--");
-            out.newLine();
         }
-        
-        out.write("Topping");
+
+        out.write("Toppings");
         out.newLine();
         out.write("" + toppings.size());
         out.newLine();
@@ -74,13 +73,11 @@ public class Serving {
         for(MixIn m : toppings) {
             m.save(out);
             out.newLine();
-            out.write("--TOPPINGEND--");
-            out.newLine();
         }
     }
 
     public void addScoop(Scoop scoop) {
-        scoops.add(scoop); 
+        scoops.add(scoop);
     }
 
     public void addTopping(MixIn topping) {
@@ -93,7 +90,7 @@ public class Serving {
         String delimiter = ", ";
 
         str.append(container.toString());
-        
+
         if(scoops.size() > 1) {
             str.append(" with scoops of ");
         }

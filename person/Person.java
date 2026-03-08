@@ -12,23 +12,24 @@ public class Person {
     }
 
     public Person(BufferedReader in) throws IOException {
-        this.name = in.readLine();
-        this.phone = in.readLine();
+        String name = in.readLine();
+        String phone = in.readLine();
+        this(name, phone);
     }
 
     public void save(BufferedWriter out) throws IOException {
         out.write(name);
         out.newLine();
-		
+
         out.write(phone);
         out.newLine();
     }
-    
-    @Override 
+
+    @Override
     public String toString() {
         return name;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         return true;
