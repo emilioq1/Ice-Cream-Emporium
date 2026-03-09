@@ -31,7 +31,7 @@ public class Scoop {
         flavor.save(out);
         out.newLine();
 
-        out.write("" + mixins.size());
+        out.write("Mixins;" + mixins.size());
         out.newLine();
 
         for(MixIn m : mixins) {

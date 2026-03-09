@@ -5,44 +5,45 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.Optional;
 
 import person.Customer;
 
 
 public class Order {
-    public Order() {
-        this.customer = null;
-        servings = new ArrayList<>();
-    }
-
     public Order(Customer customer) {
         this.customer = customer;
-        servings = new ArrayList<>();
-    }
-
-    public Order(Customer customer, ArrayList<Serving> s) {
-        this.customer = customer;
-        this.servings = s;
+        this.servings = new ArrayList<>();
     }
 
     public Order(BufferedReader in) throws IOException {
         Customer customer = new Customer(in);
-        ArrayList<Serving> servs = new ArrayList<Serving>();
+        this(customer);
 
-        int numServing = Integer.parseInt(in.readLine());
-        for(int i = 0; i < numServing; i++) {
-            servs.add(new Serving(in));
+        String line = in.readLine();
+        if(line.isBlank()) {
+            throw new IOException(
+                    "Loading order from file failed: Wrong header, expected \"Servings;{size: int}\", got \"\".");
         }
+        StringTokenizer st = new StringTokenizer(line, ";");
 
-        this(customer, servs);
+        String identifier = st.nextToken();
+        int numServing = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        if(identifier == "Servings") {
+            line = in.readLine();
+            for(int i = 0; i < numServing; i++) {
+                this.servings.add(new Serving(in));
+            }
+        }
     }
 
     public void save(BufferedWriter out) throws IOException {
         customer.save(out);
-        out.newLine();
-        out.write("" + servings.size());
-        out.newLine();
 
+        out.write("Servings;" + servings.size());
+        out.newLine();
         for(Serving s : servings) {
             s.save(out);
             out.newLine();

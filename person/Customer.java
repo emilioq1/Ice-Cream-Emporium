@@ -16,11 +16,6 @@ public class Customer extends Person {
 
     public void save(BufferedWriter out) throws IOException {
         super.save(out);
-        // out.write(name);
-        // out.newLine();
-
-        // out.write(phone);
-        // out.newLine();
     }
 
 }

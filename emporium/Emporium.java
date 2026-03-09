@@ -8,10 +8,11 @@ import product.Order;
 import person.Customer;
 
 import java.util.ArrayList;
-
+import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class Emporium {
@@ -22,56 +23,65 @@ public class Emporium {
         orders = new ArrayList<Order>();
         customers = new ArrayList<Customer>();
     }
-
+    
     public Emporium(BufferedReader in) throws IOException {
         this();
-        String line = new String();
-        int num = -1;
+        
+        class DataHeader {
+            String id;
+            int size;
+            
+            private DataHeader(String id, int size) {
+                this.id = id;
+                this.size = size;
+            }
 
-        while((line = in.readLine()) != null) {
-            switch(line) {
-                case "IceCreamFlavors":
-                    line = in.readLine();
-                    num = Integer.parseInt(line);
+            private DataHeader(String line, BufferedReader in) throws IOException {
+                StringTokenizer st = new StringTokenizer(line, ";");
+                String identifier = st.nextToken();
+                int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+                this(identifier, size);
+            }
+        }
 
-                    for(int i = 0; i < num; i++) {
-                        iceCreamFlavors.add(new IceCreamFlavor(in));
-                        line = in.readLine();
-                    }
 
-                    break;
-                case "MixInFlavors":
-                    line = in.readLine();
-                    num = Integer.parseInt(line);
+        String line = in.readLine();
+        DataHeader parsed = new DataHeader(line, in);
 
-                    for(int i = 0; i < num; i++) {
-                        mixInFlavors.add(new MixInFlavor(in));
-                        line = in.readLine();
-                    }
+        if(parsed.id == "IceCreamFlavors") {
+            for(int i = 0; i < parsed.size; ++i) {
+                iceCreamFlavors.add(new IceCreamFlavor(in));
+                line = in.readLine();
+            }
+        }
 
-                    break;
-                case "Containers":
-                    line = in.readLine();
-                    num = Integer.parseInt(line);
+        line = in.readLine();
+        parsed = new DataHeader(line, in);
 
-                    for(int i = 0; i < num; i++) {
-                        containers.add(new Container(in));
-                        line = in.readLine();
-                    }
+        if(parsed.id == "MixInFlavors") {
+            for(int i = 0; i < parsed.size; ++i) {
+                iceCreamFlavors.add(new IceCreamFlavor(in));
+                line = in.readLine();
+            }
+        }
 
-                    break;
-                case "Orders":
-                    line = in.readLine();
-                    num = Integer.parseInt(line);
+        line = in.readLine();
+        parsed = new DataHeader(line, in);
 
-                    for(int i = 0; i < num; i++) {
-                        orders.add(new Order(in));
-                        line = in.readLine();
-                    }
+        if(parsed.id == "Containers") {
+            for(int i = 0; i < parsed.size; i++) {
+                containers.add(new Container(in));
+                line = in.readLine();
+            }
+        }
 
-                    break;
-                default:
-                    break;
+        line = in.readLine();
+        parsed = new DataHeader(line, in);
+
+        if(parsed.id == "Orders") {
+            for(int i = 0; i < parsed.size; i++) {
+                orders.add(new Order(in));
+                line = in.readLine();
             }
         }
     }
@@ -81,36 +91,29 @@ public class Emporium {
         // Mix In Flavors: Name, Description, Price, Cost
         // Containers: Name, Description, Max Scoops
         // Orders: Customer, Servings
-        out.write("IceCreamFlavors");
-        out.newLine();
-        out.write("" + iceCreamFlavors.size());
+
+        out.write("IceCreamFlavors;" + iceCreamFlavors.size());
         out.newLine();
         for(IceCreamFlavor i : iceCreamFlavors) {
             i.save(out);
             out.newLine();
         }
 
-        out.write("MixInFlavors");
-        out.newLine();
-        out.write("" + mixInFlavors.size());
+        out.write("MixInFlavors;" + mixInFlavors.size());
         out.newLine();
         for(MixInFlavor m : mixInFlavors) {
             m.save(out);
             out.newLine();
         }
 
-        out.write("Containers");
-        out.newLine();
-        out.write("" + containers.size());
+        out.write("Containers;" + containers.size());
         out.newLine();
         for(Container c : containers) {
             c.save(out);
             out.newLine();
         }
 
-        out.write("Orders");
-        out.newLine();
-        out.write("" + orders.size());
+        out.write("Orders;" + orders.size());
         out.newLine();
         for(Order o : orders) {
             o.save(out);

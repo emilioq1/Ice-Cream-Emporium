@@ -3,6 +3,7 @@ package person;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 
 public class Person {
@@ -12,17 +13,22 @@ public class Person {
     }
 
     public Person(BufferedReader in) throws IOException {
-        String name = in.readLine();
-        String phone = in.readLine();
+        String line = in.readLine();
+        if(line.isBlank()) {
+            throw new IOException("Loading person from file failed: expected \"{name: str};{phone: str}\", got \"\".");
+        }
+        StringTokenizer st = new StringTokenizer(line, ";");
+
+
+        String name = st.nextToken();
+        String phone = st.nextToken();
+
         this(name, phone);
     }
 
     public void save(BufferedWriter out) throws IOException {
-        out.write(name);
-        out.newLine();
-
-        out.write(phone);
-        out.newLine();
+        String personStr = String.format("%s;%s", name, "" + phone);
+        out.write(personStr);
     }
 
     @Override

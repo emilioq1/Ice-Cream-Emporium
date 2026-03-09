@@ -47,28 +47,34 @@ public class Serving {
     }
 
     public void save(BufferedWriter out) throws IOException {
-        out.write("Serving");
-        out.newLine();
+        //out.write("Serving");
+        //out.newLine();
 
-        out.write("Container");
-        out.newLine();
+        //out.write("Container");
+        //out.newLine();
         container.save(out);
         out.newLine();
 
-        out.write("Scoops");
+        out.write("Scoops;" + scoops.size());
         out.newLine();
-        out.write("" + scoops.size());
-        out.newLine();
+
+        //out.write("Scoops");
+        //out.newLine();
+        //out.write("" + scoops.size());
+        //out.newLine();
 
         for(Scoop s : scoops) {
             s.save(out);
             out.newLine();
         }
 
-        out.write("Toppings");
+        out.write("Toppings;" + toppings.size());
         out.newLine();
-        out.write("" + toppings.size());
-        out.newLine();
+
+        //out.write("Toppings");
+        //out.newLine();
+        //out.write("" + toppings.size());
+        //out.newLine();
 
         for(MixIn m : toppings) {
             m.save(out);

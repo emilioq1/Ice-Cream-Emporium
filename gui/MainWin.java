@@ -662,7 +662,8 @@ public class MainWin extends JFrame {
         if(choice == null) {
             return;
         }
-        Order userOrder = new Order(((Customer)choice));
+
+        Order userOrder = new Order((Customer)choice);
 
         while(true) {
             Serving userServing = onCreateServing();

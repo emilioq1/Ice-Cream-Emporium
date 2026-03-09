@@ -3,6 +3,8 @@ package product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.Optional;
 
 
 public class Item {
@@ -14,42 +16,25 @@ public class Item {
     }
 
     public Item(BufferedReader in) throws IOException {
-        String name = "";
-        String description = "";
-        int cost = -1;
-        int price = -1;
-
         String line = in.readLine();
-        if(!line.isBlank()) name = line;
-        else throw new IOException("Line is blank when it should not be.");
+        if(line.isBlank()) {
+            throw new IOException(
+                    "Loading item from file failed: expected \"{name: str};{description: str};{price: int};{cost: int}\", got \"\".");
+        }
+        StringTokenizer st = new StringTokenizer(line, ";");
 
-        line = in.readLine();
-        if(!line.isBlank()) description = line;
-        else throw new IOException("Line is blank when it should not be.");
 
-        line = in.readLine();
-        if(!line.isBlank()) cost = Integer.parseInt(line);
-        else throw new IOException("Line is blank when it should not be.");
-
-        line = in.readLine();
-        if(!line.isBlank()) price = Integer.parseInt(line);
-        else throw new IOException("Line is blank when it should not be.");
+        String name = st.nextToken();
+        String description = st.nextToken();
+        int cost = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        int price = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, cost, price);
     }
 
     public void save(BufferedWriter out) throws IOException {
-        out.write(name);
-        out.newLine();
-
-        out.write(description);
-        out.newLine();
-
-        out.write("" + price);
-        out.newLine();
-
-        out.write("" + cost);
-        out.newLine();
+        String itemStr = String.format("%s;%s;%s;%s", name, description, "" + price, "" + cost);
+        out.write(itemStr);
     }
 
     public String name() {
