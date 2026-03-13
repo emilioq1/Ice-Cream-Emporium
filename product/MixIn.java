@@ -13,11 +13,12 @@ public class MixIn {
 
     public MixIn(BufferedReader in) throws IOException {
         this.flavor = new MixInFlavor(in);
-        this.amount = MixInAmount.valueOf(in.readLine());
+        this.amount = MixInAmount.valueOf(in.readLine().trim());
     }
 
     public void save(BufferedWriter out) throws IOException {
         flavor.save(out);
+        out.write(";");
         out.write(amount.toString());
     }
 
@@ -30,6 +31,27 @@ public class MixIn {
         // Print only the flavor if the mixin amount is normal.
         // This is the default and does not need to be noted.
         return flavor.toString();
+    }
+
+    public String toStringDebug() {
+        return flavor.toString() + ";" + amount.toString();
+    }
+
+    
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MixIn mixIn = (MixIn)o;
+
+        boolean flavorEquals = this.flavor.equals(mixIn.flavor);
+        boolean amountEquals = this.amount.equals(mixIn.amount);
+        
+        return flavorEquals && amountEquals;
     }
 
     public int price() {

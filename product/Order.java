@@ -21,18 +21,18 @@ public class Order {
         Customer customer = new Customer(in);
         this(customer);
 
-        String line = in.readLine();
+        String line = in.readLine().trim();
         if(line.isBlank()) {
             throw new IOException(
                     "Loading order from file failed: Wrong header, expected \"Servings;{size: int}\", got \"\".");
         }
         StringTokenizer st = new StringTokenizer(line, ";");
 
-        String identifier = st.nextToken();
-        int numServing = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String identifier = st.nextToken().trim();
+        int numServing = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
 
         if(identifier == "Servings") {
-            line = in.readLine();
+            line = in.readLine().trim();
             for(int i = 0; i < numServing; i++) {
                 this.servings.add(new Serving(in));
             }
@@ -40,11 +40,16 @@ public class Order {
     }
 
     public void save(BufferedWriter out) throws IOException {
+        // \t
         customer.save(out);
+        out.newLine();
 
+        // \t\t
+        out.write("\t\t");
         out.write("Servings;" + servings.size());
         out.newLine();
         for(Serving s : servings) {
+            out.write("\t\t\t");
             s.save(out);
             out.newLine();
         }
@@ -65,6 +70,35 @@ public class Order {
         }
 
         return str.toString();
+    }
+
+    public String debugToString() {
+        StringBuilder str = new StringBuilder();
+
+        str.append("{" + customer.toStringDebug() + "}, ");
+        str.append("[");
+        for(Serving s: servings) {
+            str.append(s.toStringDebug());
+        }
+        str.append("]");
+
+        return str.toString();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Order order = (Order)o;
+
+        boolean customerEquals = this.customer.equals(order.customer);
+        boolean servingsEquals = this.servings.equals(order.servings);
+
+        return customerEquals && servingsEquals;
     }
 
     public int price() {

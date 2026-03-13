@@ -16,7 +16,7 @@ public class Item {
     }
 
     public Item(BufferedReader in) throws IOException {
-        String line = in.readLine();
+        String line = in.readLine().trim();
         if(line.isBlank()) {
             throw new IOException(
                     "Loading item from file failed: expected \"{name: str};{description: str};{price: int};{cost: int}\", got \"\".");
@@ -24,16 +24,16 @@ public class Item {
         StringTokenizer st = new StringTokenizer(line, ";");
 
 
-        String name = st.nextToken();
-        String description = st.nextToken();
-        int cost = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-        int price = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String name = st.nextToken().trim();
+        String description = st.nextToken().trim();
+        int cost = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
+        int price = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, cost, price);
     }
 
     public void save(BufferedWriter out) throws IOException {
-        String itemStr = String.format("%s;%s;%s;%s", name, description, "" + price, "" + cost);
+        String itemStr = String.format("%s;%s;%s;%s", name, description, "" + cost, "" + price);
         out.write(itemStr);
     }
 
@@ -56,6 +56,24 @@ public class Item {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Item item = (Item)o;
+
+        boolean nameEqual = this.name.equals(item.name);
+        boolean descriptionEqual = this.description.equals(item.description);
+        boolean costEqual = this.cost == item.cost;
+        boolean priceEqual = this.price == item.price;
+
+        return nameEqual && descriptionEqual && costEqual && priceEqual;
     }
 
     private String name;

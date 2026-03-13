@@ -35,16 +35,32 @@ public class Person {
     public String toString() {
         return name;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return true;
+    
+    public String toStringDebug() {
+        return name + ";" + phone;
     }
 
     @Override
-    public int hashCode() {
-        return 1;
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Person container = (Person)o;
+
+        boolean nameEqual = this.name.equals(container.name);
+        boolean phoneEqual = this.phone.equals(container.phone);
+
+        return nameEqual && phoneEqual;
     }
+
+
+    //@Override
+    //public int hashCode() {
+    //    return this.hashCode();
+    //}
 
     protected String name;
     protected String phone;

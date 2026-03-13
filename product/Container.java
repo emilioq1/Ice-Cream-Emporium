@@ -15,7 +15,7 @@ public class Container {
     }
 
     public Container(BufferedReader in) throws IOException {
-        String line = in.readLine();
+        String line = in.readLine().trim();
         if(line.isBlank()) {
             throw new IOException(
                     "Loading container from file failed: expected \"{name: str};{description: str};{maxScoops: int}\", got \"\".");
@@ -23,9 +23,9 @@ public class Container {
         StringTokenizer st = new StringTokenizer(line, ";");
 
 
-        String name = st.nextToken();
-        String description = st.nextToken();
-        int maxScoops = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String name = st.nextToken().trim();
+        String description = st.nextToken().trim();
+        int maxScoops = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, maxScoops);
     }
@@ -38,6 +38,27 @@ public class Container {
     @Override
     public String toString() {
         return name;
+    }
+    
+    public String toStringDebug() {
+        return String.join(";", name, description, "" + maxScoops);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Container container = (Container)o;
+
+        boolean nameEqual = this.name.equals(container.name);
+        boolean descriptionEqual = this.description.equals(container.description);
+        boolean maxScoopsEqual = this.maxScoops == container.maxScoops;
+
+        return nameEqual && descriptionEqual && maxScoopsEqual;
     }
 
     public int maxScoops() {

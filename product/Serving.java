@@ -19,64 +19,53 @@ public class Serving {
         toppings = new ArrayList<MixIn>();
 
         // Read Serving
-        String line = in.readLine();
+        String line = in.readLine().trim();
         if(line != "Serving") throw new IOException("Wrong part of file.");
 
-        line = in.readLine();
+        line = in.readLine().trim();
         if(line != "Container") throw new IOException("Not at \"Container\".");
         this.container = new Container(in);
 
-        line = in.readLine();
+        line = in.readLine().trim();
         if(line != "Scoops") throw new IOException("Not at \"Scoops\".");
-        line = in.readLine();
 
+        line = in.readLine().trim();
         int numScoops = Integer.parseInt(line);
         for(int i = 0; i < numScoops; i++) {
             scoops.add(new Scoop(in));
-            line = in.readLine();
+            line = in.readLine().trim();
         }
 
         if(line != "Toppings") throw new IOException("Not at \"Toppings\".");
-        line = in.readLine();
+        line = in.readLine().trim();
 
         int numToppings = Integer.parseInt(line);
         for(int i = 0; i < numToppings; i++) {
             toppings.add(new MixIn(in));
-            line = in.readLine();
+            line = in.readLine().trim();
         }
     }
 
     public void save(BufferedWriter out) throws IOException {
-        //out.write("Serving");
-        //out.newLine();
-
-        //out.write("Container");
-        //out.newLine();
+        // \t\t\t
         container.save(out);
         out.newLine();
 
+        out.write("\t\t\t");
         out.write("Scoops;" + scoops.size());
         out.newLine();
-
-        //out.write("Scoops");
-        //out.newLine();
-        //out.write("" + scoops.size());
-        //out.newLine();
-
         for(Scoop s : scoops) {
+            out.write("\t\t\t\t");
             s.save(out);
             out.newLine();
         }
 
+        out.write("\t\t\t");
         out.write("Toppings;" + toppings.size());
         out.newLine();
 
-        //out.write("Toppings");
-        //out.newLine();
-        //out.write("" + toppings.size());
-        //out.newLine();
-
         for(MixIn m : toppings) {
+            out.write("\t\t\t\t");
             m.save(out);
             out.newLine();
         }
@@ -120,6 +109,43 @@ public class Serving {
         }
 
         return str.toString();
+    }
+
+    public String toStringDebug() {
+        StringBuilder str = new StringBuilder();
+
+        str.append("{" + container.toStringDebug() + "}, ");
+
+        str.append("[");
+        for(Scoop s: scoops) {
+            str.append(s.toStringDebug()).append(";");
+        }
+        str.append("], ");
+
+        str.append("[");
+        for(MixIn m: toppings) {
+            str.append(m.toStringDebug()).append(";");
+        }
+        str.append("]");
+
+        return str.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Serving serving = (Serving)o;
+
+        boolean containerEquals = this.container.equals(serving.container);
+        boolean scoopsEquals = this.scoops.equals(serving.scoops);
+        boolean toppingsEquals = this.toppings.equals(serving.toppings);
+
+        return containerEquals && scoopsEquals && toppingsEquals;
     }
 
     public int price() {

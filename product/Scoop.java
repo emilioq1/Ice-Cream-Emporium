@@ -18,7 +18,7 @@ public class Scoop {
         mixins = new ArrayList<MixIn>();
         MixIn mixin;
 
-        in.readLine();
+        in.readLine().trim();
         int numMixIn = Integer.parseInt(in.readLine());
         for(int i = 0; i < numMixIn; i++) {
             mixin = new MixIn(in);
@@ -31,10 +31,11 @@ public class Scoop {
         flavor.save(out);
         out.newLine();
 
-        out.write("Mixins;" + mixins.size());
+        out.write("\t\t\t\tMixins;" + mixins.size());
         out.newLine();
 
         for(MixIn m : mixins) {
+            out.write("\t\t\t\t\t");
             m.save(out);
             out.newLine();
         }
@@ -63,9 +64,37 @@ public class Scoop {
         return s.toString();
     }
 
+    public String toStringDebug() {
+        StringBuilder str = new StringBuilder();
+
+        str.append(flavor.toString()).append(";");
+        
+        str.append("[");
+        for(MixIn m: mixins) {
+            str.append(m.toString()).append(";");
+        }
+        str.append("]");
+
+        return str.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Scoop scoop = (Scoop)o;
+
+        boolean flavorEquals = this.flavor.equals(scoop.flavor);
+        boolean mixinsEquals = this.mixins.equals(scoop.mixins);
+        
+        return flavorEquals && mixinsEquals;
+    }
+
     public int price() {
-        int icePrice = 0;
-        int mixInPrice = 0;
         int price = 0;
 
         price += flavor.price();
