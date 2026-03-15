@@ -30,7 +30,7 @@ public class Emporium {
         String line = in.readLine();
         
         StringTokenizer st = new StringTokenizer(line, ";");
-        String identifier = st.nextToken();
+        st.nextToken();
         int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         
         for(int i = 0; i < size; ++i) {
@@ -39,7 +39,7 @@ public class Emporium {
         }
 
         st = new StringTokenizer(line, ";");
-        identifier = st.nextToken();
+        st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; ++i) {
             mixInFlavors.add(new MixInFlavor(in));
@@ -47,7 +47,7 @@ public class Emporium {
         }
         
         st = new StringTokenizer(line, ";");
-        identifier = st.nextToken();
+        st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             containers.add(new Container(in));
@@ -55,7 +55,15 @@ public class Emporium {
         }
 
         st = new StringTokenizer(line, ";");
-        identifier = st.nextToken();
+        st.nextToken();
+        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        for(int i = 0; i < size; i++) {
+            customers.add(new Customer(in));
+            line = in.readLine().trim();
+        }
+
+        st = new StringTokenizer(line, ";");
+        st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             orders.add(new Order(in));
@@ -88,6 +96,14 @@ public class Emporium {
         out.write("Containers;" + containers.size());
         out.newLine();
         for(Container c : containers) {
+            out.write("\t");
+            c.save(out);
+            out.newLine();
+        }
+
+        out.write("Customers;" + customers.size());
+        out.newLine();
+        for(Customer c : customers) {
             out.write("\t");
             c.save(out);
             out.newLine();

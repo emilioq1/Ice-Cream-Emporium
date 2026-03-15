@@ -26,16 +26,13 @@ public class Order {
             throw new IOException(
                     "Loading order from file failed: Wrong header, expected \"Servings;{size: int}\", got \"\".");
         }
+
         StringTokenizer st = new StringTokenizer(line, ";");
-
-        String identifier = st.nextToken();
-        int numServing = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-
-        if(identifier == "Servings") {
-            line = in.readLine().trim();
-            for(int i = 0; i < numServing; i++) {
-                this.servings.add(new Serving(in));
-            }
+        st.nextToken(); // Skip identifier
+        int numServings = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        
+        for(int i = 0; i < numServings; ++i) {
+            this.servings.add(new Serving(in));
         }
     }
 

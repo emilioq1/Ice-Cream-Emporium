@@ -5,26 +5,29 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.Optional;
 
 
 public class Scoop {
     public Scoop(IceCreamFlavor flavor) {
         this.flavor = flavor;
-        mixins = new ArrayList<MixIn>();
+        this.mixins = new ArrayList<MixIn>();
     }
 
     public Scoop(BufferedReader in) throws IOException {
         this.flavor = new IceCreamFlavor(in);
-        mixins = new ArrayList<MixIn>();
-        MixIn mixin;
+        this.mixins = new ArrayList<MixIn>();
 
-        in.readLine().trim();
-        int numMixIn = Integer.parseInt(in.readLine());
-        for(int i = 0; i < numMixIn; i++) {
-            mixin = new MixIn(in);
-            mixins.add(mixin);
+        String line = in.readLine().trim();
+
+        StringTokenizer st = new StringTokenizer(line, ";");
+        st.nextToken(); // Skip identifier
+        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        for(int i = 0; i < size; ++i) {
+            this.mixins.add(new MixIn(in));
         }
-        in.readLine();
     }
 
     public void save(BufferedWriter out) throws IOException {
@@ -42,13 +45,13 @@ public class Scoop {
     }
 
     public void addMixIn(MixIn mixin) {
-        mixins.add(mixin);
+        this.mixins.add(mixin);
     }
 
     @Override
     public String toString() {
         // if there are no mix in's, then just print the flavor
-        if(mixins.size() == 0) {
+        if(this.mixins.size() == 0) {
             return flavor.toString();
         }
 
@@ -56,7 +59,7 @@ public class Scoop {
         String delimiter = ", ";
 
         s.append(flavor).append(" with ");
-        for(MixIn m : mixins) {
+        for(MixIn m : this.mixins) {
             s.append(m).append(delimiter);
         }
         s.deleteCharAt(s.length() - delimiter.length());
@@ -70,7 +73,7 @@ public class Scoop {
         StringBuilder mixinsStr = new StringBuilder();
         mixinsStr.append("mixins: [");
         ArrayList<String> mixinsList = new ArrayList<>();
-        for(MixIn m: mixins) {
+        for(MixIn m: this.mixins) {
             mixinsList.add("(" + m.toStringDebug() + ")");
         }
         mixinsStr.append(String.join(", ", mixinsList));

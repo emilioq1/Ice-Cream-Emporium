@@ -18,7 +18,8 @@ public class MixIn {
 
     public void save(BufferedWriter out) throws IOException {
         flavor.save(out);
-        out.write(";");
+        out.newLine();
+        out.write("\t\t\t\t\t");
         out.write(amount.toString());
     }
 

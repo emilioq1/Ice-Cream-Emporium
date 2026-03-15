@@ -1,10 +1,11 @@
 package product;
 
 import java.util.ArrayList;
-
+import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Optional;
 
 
 public class Serving {
@@ -18,31 +19,27 @@ public class Serving {
         scoops = new ArrayList<Scoop>();
         toppings = new ArrayList<MixIn>();
 
-        // Read Serving
-        String line = in.readLine().trim();
-        if(line != "Serving") throw new IOException("Wrong part of file.");
-
-        line = in.readLine().trim();
-        if(line != "Container") throw new IOException("Not at \"Container\".");
         this.container = new Container(in);
 
-        line = in.readLine().trim();
-        if(line != "Scoops") throw new IOException("Not at \"Scoops\".");
+        String line = in.readLine().trim();
 
-        line = in.readLine().trim();
-        int numScoops = Integer.parseInt(line);
-        for(int i = 0; i < numScoops; i++) {
-            scoops.add(new Scoop(in));
-            line = in.readLine().trim();
+        StringTokenizer st = new StringTokenizer(line, ";");
+        st.nextToken(); // Skip identifier
+        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        for(int i = 0; i < size; ++i) {
+            this.scoops.add(new Scoop(in));
         }
 
-        if(line != "Toppings") throw new IOException("Not at \"Toppings\".");
-        line = in.readLine().trim();
+        // Skip blank line
+        in.readLine();
+        line = in.readLine();
+        st = new StringTokenizer(line, ";");
+        st.nextToken(); // Skip identifier
+        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
 
-        int numToppings = Integer.parseInt(line);
-        for(int i = 0; i < numToppings; i++) {
-            toppings.add(new MixIn(in));
-            line = in.readLine().trim();
+        for(int i = 0; i < size; ++i) {
+            this.toppings.add(new MixIn(in));
         }
     }
 

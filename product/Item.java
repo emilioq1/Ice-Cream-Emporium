@@ -17,13 +17,12 @@ public class Item {
 
     public Item(BufferedReader in) throws IOException {
         String line = in.readLine().trim();
-        if(line.isBlank()) {
-            throw new IOException(
-                    "Loading item from file failed: expected \"{name: str};{description: str};{price: int};{cost: int}\", got \"\".");
+        // Handles the blank line after each item.
+        while(line.isBlank()) {
+            line = in.readLine().trim();
         }
+        
         StringTokenizer st = new StringTokenizer(line, ";");
-
-
         String name = st.nextToken();
         String description = st.nextToken();
         int cost = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
