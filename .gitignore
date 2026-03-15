@@ -25,5 +25,8 @@ replay_pid*
 
 .editorconfig
 
-# Ignore mice files
+# mice files
 *.mice
+
+# .vscode
+.vscode/
