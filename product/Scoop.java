@@ -65,17 +65,18 @@ public class Scoop {
     }
 
     public String toStringDebug() {
-        StringBuilder str = new StringBuilder();
-
-        str.append(flavor.toString()).append(";");
+        String flavorStr = String.format("flavor: (%s)", flavor.toStringDebug());
         
-        str.append("[");
+        StringBuilder mixinsStr = new StringBuilder();
+        mixinsStr.append("mixins: [");
+        ArrayList<String> mixinsList = new ArrayList<>();
         for(MixIn m: mixins) {
-            str.append(m.toString()).append(";");
+            mixinsList.add("(" + m.toStringDebug() + ")");
         }
-        str.append("]");
+        mixinsStr.append(String.join(", ", mixinsList));
+        mixinsStr.append("]");
 
-        return str.toString();
+        return String.join(", ", flavorStr, mixinsStr.toString());
     }
 
     @Override

@@ -34,7 +34,10 @@ public class MixIn {
     }
 
     public String toStringDebug() {
-        return flavor.toString() + ";" + amount.toString();
+        String flavorStr = String.format("flavor: (%s)", flavor.toStringDebug());
+        String amountStr = String.format("amount: %s", amount.toString());
+        
+        return String.join(", ", flavorStr, amountStr);
     }
 
     

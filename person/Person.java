@@ -13,7 +13,7 @@ public class Person {
     }
 
     public Person(BufferedReader in) throws IOException {
-        String line = in.readLine();
+        String line = in.readLine().trim();
         if(line.isBlank()) {
             throw new IOException("Loading person from file failed: expected \"{name: str};{phone: str}\", got \"\".");
         }
@@ -37,7 +37,11 @@ public class Person {
     }
     
     public String toStringDebug() {
-        return name + ";" + phone;
+        String nameStr = String.format("name: \"%s\"", name);
+        String phoneStr = String.format("phone: \"%s\"", phone);
+
+        return nameStr + ", "  + phoneStr;
+        //return String.format("(%s, %s)", nameStr, phoneStr);
     }
 
     @Override

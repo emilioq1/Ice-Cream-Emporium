@@ -23,9 +23,9 @@ public class Container {
         StringTokenizer st = new StringTokenizer(line, ";");
 
 
-        String name = st.nextToken().trim();
-        String description = st.nextToken().trim();
-        int maxScoops = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
+        String name = st.nextToken();
+        String description = st.nextToken();
+        int maxScoops = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, maxScoops);
     }
@@ -41,7 +41,11 @@ public class Container {
     }
     
     public String toStringDebug() {
-        return String.join(";", name, description, "" + maxScoops);
+        String nameStr = String.format("name: \"%s\"", name);
+        String descriptionStr = String.format("description: \"%s\"", description);
+        String maxScoopsStr = String.format("maxScoops: %d", maxScoops);
+        
+        return String.join(", ", nameStr, descriptionStr, maxScoopsStr);
     }
 
     @Override

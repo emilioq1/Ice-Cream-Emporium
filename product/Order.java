@@ -28,8 +28,8 @@ public class Order {
         }
         StringTokenizer st = new StringTokenizer(line, ";");
 
-        String identifier = st.nextToken().trim();
-        int numServing = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
+        String identifier = st.nextToken();
+        int numServing = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
 
         if(identifier == "Servings") {
             line = in.readLine().trim();
@@ -72,19 +72,22 @@ public class Order {
         return str.toString();
     }
 
-    public String debugToString() {
-        StringBuilder str = new StringBuilder();
+    public String toStringDebug() {
+        String customerStr = String.format("customer: (%s)", customer.toStringDebug());
 
-        str.append("{" + customer.toStringDebug() + "}, ");
-        str.append("[");
-        for(Serving s: servings) {
-            str.append(s.toStringDebug());
+        StringBuilder servingsStr = new StringBuilder();
+        servingsStr.append("servings: [");
+
+        ArrayList<String> servingsList = new ArrayList<>();
+        for(Serving s : servings) {
+            servingsList.add("(" + s.toStringDebug() + ")");
         }
-        str.append("]");
+        servingsStr.append(String.join(", ", servingsList));
+        servingsStr.append("]");
 
-        return str.toString();
+        return String.join(", ", customerStr, servingsStr.toString());
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if(this == o) {

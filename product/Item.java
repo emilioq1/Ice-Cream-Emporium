@@ -24,10 +24,10 @@ public class Item {
         StringTokenizer st = new StringTokenizer(line, ";");
 
 
-        String name = st.nextToken().trim();
-        String description = st.nextToken().trim();
-        int cost = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
-        int price = Optional.ofNullable(st.nextToken().trim()).map(str -> Integer.parseInt(str)).orElse(0);
+        String name = st.nextToken();
+        String description = st.nextToken();
+        int cost = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        int price = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, cost, price);
     }
@@ -57,6 +57,16 @@ public class Item {
     public String toString() {
         return name;
     }
+    
+    public String toStringDebug() {
+        String nameStr = String.format("name: \"%s\"", name);
+        String descriptionStr = String.format("description: \"%s\"", description);
+        String costStr = String.format("cost: %d", cost);
+        String priceStr = String.format("price: %d", price);
+        
+        return String.join(", ", nameStr, descriptionStr, costStr, priceStr);
+    }
+
 
     @Override
     public boolean equals(Object o) {

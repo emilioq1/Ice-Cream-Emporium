@@ -112,23 +112,25 @@ public class Serving {
     }
 
     public String toStringDebug() {
-        StringBuilder str = new StringBuilder();
+        String containerStr = String.format("container: (%s)", container.toStringDebug());
 
-        str.append("{" + container.toStringDebug() + "}, ");
-
-        str.append("[");
-        for(Scoop s: scoops) {
-            str.append(s.toStringDebug()).append(";");
+        StringBuilder scoopsStr = new StringBuilder();
+        scoopsStr.append("scoops: [");
+        ArrayList<String> scoopsList = new ArrayList<>();
+        for(Scoop s : scoops) {
+            scoopsList.add("(" + s.toStringDebug() + ")");
         }
-        str.append("], ");
+        scoopsStr.append(String.join(", ", scoopsList));
+        scoopsStr.append("]");
 
-        str.append("[");
-        for(MixIn m: toppings) {
-            str.append(m.toStringDebug()).append(";");
-        }
-        str.append("]");
+        StringBuilder toppingsStr = new StringBuilder();
+        toppingsStr.append("toppings: [");
+        ArrayList<String> toppingsList = new ArrayList<>();
+        toppings.forEach(m -> toppingsList.add("(" + m.toStringDebug() + ")"));
+        toppingsStr.append(String.join(", ", toppingsList));
+        toppingsStr.append("]");
 
-        return str.toString();
+        return String.join(", ", containerStr, scoopsStr.toString(), toppingsStr.toString());
     }
 
     @Override

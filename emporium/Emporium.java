@@ -27,45 +27,37 @@ public class Emporium {
     public Emporium(BufferedReader in) throws IOException {
         this();
 
-        class DataHeader {
-            String id;
-            int size;
-
-            private DataHeader(String id, int size) {
-                this.id = id;
-                this.size = size;
-            }
-
-            private DataHeader(String line, BufferedReader in) throws IOException {
-                StringTokenizer st = new StringTokenizer(line, ";");
-                String identifier = st.nextToken();
-                int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-                this(identifier, size);
-            }
-        }
-
-
         String line = in.readLine();
-        DataHeader parsed = new DataHeader(line, in);
-
-        for(int i = 0; i < parsed.size; ++i) {
+        
+        StringTokenizer st = new StringTokenizer(line, ";");
+        String identifier = st.nextToken();
+        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        
+        for(int i = 0; i < size; ++i) {
             iceCreamFlavors.add(new IceCreamFlavor(in));
             line = in.readLine().trim();
         }
 
-        parsed = new DataHeader(line, in);
-        for(int i = 0; i < parsed.size; ++i) {
+        st = new StringTokenizer(line, ";");
+        identifier = st.nextToken();
+        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        for(int i = 0; i < size; ++i) {
             mixInFlavors.add(new MixInFlavor(in));
             line = in.readLine().trim();
         }
-        parsed = new DataHeader(line, in);
-        for(int i = 0; i < parsed.size; i++) {
+        
+        st = new StringTokenizer(line, ";");
+        identifier = st.nextToken();
+        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        for(int i = 0; i < size; i++) {
             containers.add(new Container(in));
             line = in.readLine().trim();
         }
 
-        parsed = new DataHeader(line, in);
-        for(int i = 0; i < parsed.size; i++) {
+        st = new StringTokenizer(line, ";");
+        identifier = st.nextToken();
+        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        for(int i = 0; i < size; i++) {
             orders.add(new Order(in));
             line = in.readLine().trim();
         }
@@ -158,66 +150,91 @@ public class Emporium {
         if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        Emporium e = (Emporium)o;
+        Emporium emp = (Emporium)o;
 
-        boolean iceCreamFlavorsEquals = this.iceCreamFlavors.equals(e.iceCreamFlavors);
+        boolean iceCreamFlavorsEquals = this.iceCreamFlavors.equals(emp.iceCreamFlavors);
         if(!iceCreamFlavorsEquals) {
-            for(IceCreamFlavor ice : this.iceCreamFlavors) {
-                System.err.println(ice.name());
-                System.err.println(ice.description());
-                System.err.println("" + ice.cost());
-                System.err.println("" + ice.price());
-            }
+            System.err.println("Member iceCreamFlavors do not match.");
 
-            System.err.println("");
-            for(IceCreamFlavor ice : e.iceCreamFlavors) {
-                System.err.println(ice.name());
-                System.err.println(ice.description());
-                System.err.println("" + ice.cost());
-                System.err.println("" + ice.price());
-            }
-            return false;
+            System.err.print("this.iceCreamFlavors: [");
+            ArrayList<String> iceList = new ArrayList<>();
+            this.iceCreamFlavors.forEach(ice -> iceList.add(ice.toStringDebug()));
+            System.err.print(String.join(", ", iceList));
+            System.err.println("]");
+
+            System.err.print("o.iceCreamFlavors: [");
+            ArrayList<String> iceOList = new ArrayList<>();
+            emp.iceCreamFlavors.forEach(ice -> iceOList.add(ice.toStringDebug()));
+            System.err.print(String.join(", ", iceOList));
+            System.err.println("]\n");
         }
-        boolean mixInFlavorsEquals = this.mixInFlavors.equals(e.mixInFlavors);
+
+        boolean mixInFlavorsEquals = this.mixInFlavors.equals(emp.mixInFlavors);
         if(!mixInFlavorsEquals) {
-            for(MixInFlavor ice : this.mixInFlavors) {
-                System.err.println(ice.name());
-                System.err.println(ice.description());
-                System.err.println("" + ice.cost());
-                System.err.println("" + ice.price());
-            }
+            System.err.println("Member mixInFlavors do not match.");
 
-            System.err.println("");
-            for(MixInFlavor ice : e.mixInFlavors) {
-                System.err.println(ice.name());
-                System.err.println(ice.description());
-                System.err.println("" + ice.cost());
-                System.err.println("" + ice.price());
-            }
+            System.err.print("this.mixInFlavors: [");
+            ArrayList<String> mixinsTList = new ArrayList<>();
+            this.mixInFlavors.forEach(mix -> mixinsTList.add(mix.toStringDebug()));
+            System.err.print(String.join(", ", mixinsTList));
+            System.err.println("]");
 
-            return false;
+            System.err.print("o.mixInFlavors: [");
+            ArrayList<String> mixinsOList = new ArrayList<>();
+            emp.mixInFlavors.forEach(mix -> mixinsOList.add(mix.toStringDebug()));
+            System.err.print(String.join(", ", mixinsOList));
+            System.err.println("]\n");
         }
-        boolean containersEquals = this.containers.equals(e.containers);
+
+        boolean containersEquals = this.containers.equals(emp.containers);
         if(!containersEquals) {
-            System.err.println(this.containers);
-            System.err.println("");
-            System.err.println(e.containers);
+            System.err.println("Member containers do not match.");
 
-            return false;
+            System.err.print("this.containers: [");
+            ArrayList<String> containersTList = new ArrayList<>();
+            this.containers.forEach(container -> containersTList.add(container.toStringDebug()));
+            System.err.print(String.join(", ", containersTList));
+            System.err.println("]");
+
+            System.err.print("o.containers: [");
+            ArrayList<String> containersOList = new ArrayList<>();
+            emp.containers.forEach(container -> containersOList.add(container.toStringDebug()));
+            System.err.print(String.join(", ", containersOList));
+            System.err.println("]\n");
         }
-        boolean ordersEquals = this.orders.equals(e.orders);
+
+        boolean ordersEquals = this.orders.equals(emp.orders);
         if(!ordersEquals) {
-            this.orders.forEach(order -> System.err.println(order.debugToString()));
-            e.orders.forEach(order -> System.err.println(order.debugToString()));
-            
-            //return false;
-        }
-        boolean customersEquals = this.customers.equals(e.customers);
-        if(!customersEquals) {
-            System.err.println(this.customers);
-            System.err.println(e.customers);
+            System.err.println("Member orders does not match.");
 
-            return false;
+            System.err.print("this.orders: [");
+            ArrayList<String> ordersTList = new ArrayList<>();
+            this.orders.forEach(order -> ordersTList.add(order.toStringDebug()));
+            System.err.print(String.join(", ", ordersTList));
+            System.err.println("]");
+
+            System.err.print("o.orders: [");
+            ArrayList<String> ordersOList = new ArrayList<>();
+            emp.orders.forEach(order -> ordersOList.add(order.toStringDebug()));
+            System.err.print(String.join(", ", ordersOList));
+            System.err.println("]\n");
+        }
+
+        boolean customersEquals = this.customers.equals(emp.customers);
+        if(!customersEquals) {
+            System.err.println("Member customers does not match.");
+
+            System.err.print("this.customers: [");
+            ArrayList<String> customersTList = new ArrayList<>();
+            this.customers.forEach(customer -> customersTList.add("(" + customer.toStringDebug() + ")"));
+            System.err.print(String.join(", ", customersTList));
+            System.err.println("]");
+
+            System.err.print("o.customers: [");
+            ArrayList<String> customersOList = new ArrayList<>();
+            emp.customers.forEach(customer -> customersOList.add("(" + customer.toStringDebug() + ")"));
+            System.err.print(String.join(", ", customersOList));
+            System.err.println("]\n");
         }
 
         return iceCreamFlavorsEquals && mixInFlavorsEquals && containersEquals && ordersEquals && customersEquals;
