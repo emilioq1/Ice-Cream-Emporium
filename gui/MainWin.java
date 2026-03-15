@@ -300,7 +300,7 @@ public class MainWin extends JFrame {
                     return;
                 }
 
-                rw.readLine();
+                //rw.readLine();
                 emporium = new Emporium(rw);
                 setDirty(true);
             }

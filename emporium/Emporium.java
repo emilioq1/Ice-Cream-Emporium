@@ -27,10 +27,10 @@ public class Emporium {
     public Emporium(BufferedReader in) throws IOException {
         this();
 
-        String line = in.readLine();
+        String line = in.readLine().trim();
         
         StringTokenizer st = new StringTokenizer(line, ";");
-        st.nextToken();
+        String identifier = st.nextToken();
         int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         
         for(int i = 0; i < size; ++i) {
