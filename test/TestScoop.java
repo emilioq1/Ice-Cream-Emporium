@@ -29,54 +29,54 @@ public class TestScoop {
             String emptyDescription = "Vanilla, , 0, 0";
             String emptyNameDescription = ", , -3, -4";
             String foreignString = "Vainilla, Sabor clásico, 1, 2";
-            
+
             String noMixIns = "\"Vanilla\"";
             String oneMixIns = "\"Vanilla with Snickers\"";
             String twoMixIns = "\"Vanilla with Snickers, Chocolate Chips\"";
             String oneMixInsAmount = "\"Vanilla with Snickers (Extra)\"";
             String twoMixInsAmount = "\"Vanilla with Snickers (Extra), Chocolate Chips (Extra)\"";
-            
+
             // Tests Item
             IceCreamFlavor iceCreamFlavor = new IceCreamFlavor("Vanilla", "Classic flavor", 1, 2);
             failed(iceCreamFlavor, normalString);
-            
+
             iceCreamFlavor = new IceCreamFlavor("Vanilla", "", 0, 0);
             failed(iceCreamFlavor, emptyDescription);
-            
+
             iceCreamFlavor = new IceCreamFlavor("", "", -3, -4);
             failed(iceCreamFlavor, emptyNameDescription);
-            
+
             iceCreamFlavor = new IceCreamFlavor("Vainilla", "Sabor clásico", 1, 2);
             failed(iceCreamFlavor, foreignString);
-            
+
             // Tests Scoop
             // Resets iceCreamFlavor for consistency
             iceCreamFlavor = new IceCreamFlavor("Vanilla", "Classic flavor", 1, 2);
-            
+
             MixInFlavor snickers = new MixInFlavor("Snickers", "Classic chocolate", 1, 2);
             MixInFlavor twix = new MixInFlavor("Chocolate Chips", " Chocolate with Chips", 1, 2);
             MixInAmount normal = MixInAmount.Normal;
             MixInAmount extra = MixInAmount.Extra;
-            
+
             MixIn mixInOne = new MixIn(snickers, normal);
             MixIn mixInOneWithAmount = new MixIn(snickers, extra);
             MixIn mixInTwo = new MixIn(twix, normal);
             MixIn mixInTwoWithAmount = new MixIn(twix, extra);
-            
+
             Scoop scoop = new Scoop(iceCreamFlavor);
             failed(scoop, noMixIns);
-            
+
             scoop.addMixIn(mixInOne);
             failed(scoop, oneMixIns);
-            
+
             scoop.addMixIn(mixInTwo);
             failed(scoop, twoMixIns);
-            
+
             Scoop scoopTwo = new Scoop(iceCreamFlavor);
-            
+
             scoopTwo.addMixIn(mixInOneWithAmount);
             failed(scoopTwo, oneMixInsAmount);
-            
+
             scoopTwo.addMixIn(mixInTwoWithAmount);
             failed(scoopTwo, twoMixInsAmount);
             */
@@ -92,7 +92,7 @@ public class TestScoop {
             emporium.addIceCreamFlavor(iceCream);
             emporium.addMixInFlavor(mixInFlavor);
 
-            File testFile = new File("C:\\Users\\billy\\Desktop\\Programs\\Ice-Cream-Emporium\\test.mice");
+            File testFile = new File(System.getProperty("user.dir") + File.separator + "test.mice");
 
             Serving serving = new Serving(container);
 
