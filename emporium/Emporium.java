@@ -159,6 +159,39 @@ public class Emporium {
     }
 
     @Override
+    public String toString() {
+        ArrayList<String> iceCreamList = new ArrayList<>();
+        iceCreamFlavors.forEach(ice -> iceCreamList.add("(" + ice.toStringDebug() + ")"));
+        String iceCreamOut = String.join(", ", iceCreamList);
+
+        ArrayList<String> mixInList = new ArrayList<>();
+        mixInFlavors.forEach(mix -> mixInList.add("(" + mix.toStringDebug() + ")"));
+        String mixInOut = String.join(", ", mixInList);
+
+        ArrayList<String> containersList = new ArrayList<>();
+        containers.forEach(cont -> containersList.add("(" + cont.toStringDebug() + ")"));
+        String containersOut = String.join(", ", containersList);
+
+        ArrayList<String> customersList = new ArrayList<>();
+        customers.forEach(cust -> mixInList.add("(" + cust.toStringDebug() + ")"));
+        String customersOut = String.join(", ", customersList);
+
+        ArrayList<String> ordersList = new ArrayList<>();
+        orders.forEach(ord -> ordersList.add("(" + ord.toStringDebug() + ")"));
+        String ordersOut = String.join(", ", ordersList);
+
+        String output =  "Emporium{" +
+                "iceCreamFlavors={" + iceCreamOut +
+                "}, mixInFlavors={" + mixInOut +
+                "}, containers={" + containersOut +
+                "}, customers={" + customersOut +
+                "}, orders={" + ordersOut +
+                '}';
+
+        return output;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if(this == o) {
             return true;
