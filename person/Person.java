@@ -35,12 +35,12 @@ public class Person {
     public String toString() {
         return name;
     }
-    
+
     public String toStringDebug() {
         String nameStr = String.format("name: \"%s\"", name);
         String phoneStr = String.format("phone: \"%s\"", phone);
 
-        return nameStr + ", "  + phoneStr;
+        return nameStr + ", " + phoneStr;
         //return String.format("(%s, %s)", nameStr, phoneStr);
     }
 
