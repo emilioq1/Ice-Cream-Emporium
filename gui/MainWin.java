@@ -187,7 +187,7 @@ public class MainWin extends JFrame {
         // Buttons
         // File buttons
         saveB = new JButton(saveIcon);
-        saveB.setToolTipText("Save your session to default file");
+        saveB.setToolTipText("Save your session to current file");
         saveB.addActionListener(event -> onSaveClick());
 
         saveAsB = new JButton(saveAsIcon);
@@ -266,8 +266,12 @@ public class MainWin extends JFrame {
         this.add(scrollPane, BorderLayout.PAGE_START);
     }
 
+    private void ErrorDialog(String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
     public void onOpenClick() {
-        final JFileChooser chooser = new JFileChooser();
+        final JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
         FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files", "mice");
         chooser.addChoosableFileFilter(miceFiles);
         chooser.setFileFilter(miceFiles);
@@ -277,26 +281,21 @@ public class MainWin extends JFrame {
             file = chooser.getSelectedFile();
 
             String filename = file.getName();
+            if(!filename.endsWith(".mice")) {
+                ErrorDialog("Open Error", String.format("\"%s\" is not a MICE file.", filename));
+                return;
+            }
 
             try(BufferedReader rw = new BufferedReader(new FileReader(file))) {
                 String line = rw.readLine();
                 if(!line.equals(MAGIC_COOKIE)) {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            String.format("\"%s\" is not a MICE file.", filename),
-                            "Open Error",
-                            JOptionPane.ERROR_MESSAGE);
-
+                    ErrorDialog("Open Error", String.format("\"%s\" is not a MICE file.", filename));
                     return;
                 }
 
                 line = rw.readLine();
                 if(!(line.equals(FILE_VERSION))) {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            String.format("\"%s\" has the wrong MICE file version.", filename),
-                            "Open Error",
-                            JOptionPane.ERROR_MESSAGE);
+                    ErrorDialog("Open Error", String.format("\"%s\" has the wrong MICE file version.", filename));
                     return;
                 }
 
@@ -305,16 +304,12 @@ public class MainWin extends JFrame {
                 setDirty(true);
             }
             catch(IOException e) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Unable to open" + file + "\n" + e,
-                        "Open Error",
-                        JOptionPane.ERROR_MESSAGE);
+                ErrorDialog("Open Error", String.format("Unable to open %s.\n%s", filename, e));
                 return;
             }
         }
         else if(returnValue == JFileChooser.ERROR_OPTION) {
-            JOptionPane.showMessageDialog(this, "An error has occurred.", "Open Error", JOptionPane.ERROR_MESSAGE);
+            ErrorDialog("Open Error", "An error has occurred in file chooser.");
         }
 
         return;
@@ -323,11 +318,7 @@ public class MainWin extends JFrame {
     public void onSaveClick() {
         if(file == null) {
             if(onSaveAsClick() != 0) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "You must create a new file to save session.",
-                        "Save Error",
-                        JOptionPane.ERROR_MESSAGE);
+                ErrorDialog("Save Error", "You must create a new file to save session.");
                 return;
             }
         }
@@ -340,18 +331,14 @@ public class MainWin extends JFrame {
             emporium.save(bw);
         }
         catch(IOException e) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Unable to save " + file + "\n" + e,
-                    "Save Error",
-                    JOptionPane.ERROR_MESSAGE);
+            ErrorDialog("Save Error", String.format("Unable to save %s.\n%s", file.getName(), e));
         }
 
         return;
     }
 
     public int onSaveAsClick() {
-        final JFileChooser chooser = new JFileChooser();
+        final JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
         FileNameExtensionFilter miceFiles = new FileNameExtensionFilter("MICE files", "mice");
         chooser.addChoosableFileFilter(miceFiles);
         chooser.setFileFilter(miceFiles);

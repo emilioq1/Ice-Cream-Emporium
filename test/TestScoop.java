@@ -3,9 +3,11 @@ package test;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 
 import product.Item;
 import product.IceCreamFlavor;
@@ -81,57 +83,7 @@ public class TestScoop {
             failed(scoopTwo, twoMixInsAmount);
             */
 
-
-            Emporium emporium = new Emporium();
-
-            IceCreamFlavor iceCream = new IceCreamFlavor("Vanilla", "Plain old Vanilla", 1, 2);
-            MixInFlavor mixInFlavor = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
-            Container container = new Container("Cup", "A plastic cup", 4);
-
-            emporium.addContainer(container);
-            emporium.addIceCreamFlavor(iceCream);
-            emporium.addMixInFlavor(mixInFlavor);
-
-            File testFile = new File(System.getProperty("user.dir") + File.separator + "test.mice");
-
-            Serving serving = new Serving(container);
-
-            Scoop scoop1 = new Scoop(iceCream);
-            MixIn mixIn1 = new MixIn(mixInFlavor, MixInAmount.Light);
-            scoop1.addMixIn(mixIn1);
-            serving.addScoop(scoop1);
-
-            Scoop scoop2 = new Scoop(iceCream);
-            serving.addScoop(scoop2);
-
-            Scoop scoop3 = new Scoop(iceCream);
-            MixIn mixIn3 = new MixIn(mixInFlavor, MixInAmount.Normal);
-            MixIn mixIn3_2 = new MixIn(mixInFlavor, MixInAmount.Light);
-            scoop3.addMixIn(mixIn3);
-            scoop3.addMixIn(mixIn3_2);
-            serving.addScoop(scoop3);
-
-            Scoop scoop4 = new Scoop(iceCream);
-            MixIn mixIn4 = new MixIn(mixInFlavor, MixInAmount.Extra);
-            scoop4.addMixIn(mixIn4);
-            serving.addScoop(scoop4);
-
-            serving.addTopping(mixIn1);
-
-            Customer person = new Customer("Billy", "1928312213");
-
-            Order order = new Order(person);
-
-            order.addServing(serving);
-
-            emporium.addCustomer(person);
-            emporium.addOrder(order);
-
-            onSave(testFile, emporium);
-
-            Emporium emporium2 = onLoad(testFile);
-
-            matchEmporium(emporium, emporium2);
+            testLoading();
         }
         catch(Exception e) {
             System.err.println(e);
@@ -144,36 +96,242 @@ public class TestScoop {
     final static String MAGIC_COOKIE = "ꬺICƐ🧊🍨";
     final static String FILE_VERSION = "1.1";
 
-    private static void matchEmporium(Emporium a, Emporium b) throws NoMatchException {
-        if(a.equals(b)) {
-            System.out.println("Emporiums are equal");
+    private static void testLoading() throws Exception {
+        /*
+        Happy Path Tests
+            - Load valid file – Load a well-formed file and verify all 5 lists are populated with the correct number of objects and correct field values.
+            - Load maximum data – Load a large file to ensure no truncation or performance issues.
+            - Load minimum data – Load a file with exactly one entry per list to confirm it doesn't require multiple records.
+        Empty / Missing Data Tests
+            - Empty file – Load a completely empty file and verify all lists are initialized as empty (not null).
+            - Empty section – Load a file where one or more lists (e.g., orders) have zero entries; verify other lists still load correctly.
+            - Missing file – Provide a path to a nonexistent file and verify a proper exception is thrown (not a silent failure or crash).
+        Data Integrity Tests
+            - Correct types – After loading, verify that objects in each list are the correct type (IceCreamFlavor, MixInFlavor, etc.), not just raw strings.
+            - Field accuracy – Spot-check specific fields on loaded objects (e.g., a flavor's name/price) against known values in the test file.
+            - List independence – Confirm that modifying one list after loading doesn't affect others (no shared references).
+            - Order references – If Order objects reference Customer, Container, or flavor objects, verify those references are correctly resolved after loading, not left as dangling IDs or nulls.
+        Malformed Input Tests
+            - Corrupted data – Load a file with a malformed entry (e.g., a missing field or wrong data type) and verify graceful error handling.
+            - Extra/unknown fields – Load a file with extra fields or sections and confirm it doesn't crash or corrupt the valid data.
+            - Wrong file format – Pass a file of the wrong type (e.g., a .txt instead of the expected format) and verify a meaningful error.
+        Boundary / Edge Case Tests
+            - Duplicate entries – Load a file with duplicate records and decide/verify whether they are both added or deduplicated.
+            - Special characters – Include flavor/customer names with spaces, apostrophes, or accented characters and verify they load correctly.
+            - Whitespace/blank lines – Include extra blank lines or trailing whitespace in the file and verify it doesn't break parsing.
+        Re-load Tests
+            - Load twice – Call the load method twice and verify the lists are replaced (not doubled) on the second load.
+            - Load after modification – Manually add an item to a list, then reload from file, and confirm the list reflects only the file's contents.
+         */
+        // Test Data
+        String rootPath = System.getProperty("user.dir") + File.separator;
+
+        IceCreamFlavor iceCream1 = new IceCreamFlavor("Vanilla", "Plain old Vanilla", 1, 2);
+        IceCreamFlavor iceCream2 = new IceCreamFlavor("Chocolate", "Milk Chocolate", 3, 5);
+        IceCreamFlavor iceCream3 = new IceCreamFlavor("Strawberry", "Iced strawberries", 6, 10);
+        MixInFlavor mixInFlavor1 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
+        MixInFlavor mixInFlavor2 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
+        MixInFlavor mixInFlavor3 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
+        Container container1 = new Container("Cup", "A plastic cup", 8);
+        Container container2 = new Container("Waffle cone", "A cone made of waffle", 4);
+        Container container3 = new Container("Large cup", "A large plastic cup", 10);
+        Customer person1 = new Customer("Billy", "1928312213");
+        Customer person2 = new Customer("John", "");
+        Customer person3 = new Customer("Sally", "10938176629");
+
+        {
+            System.out.print("[TEST 1] Non-existent file -> ");
+            try {
+                String noFilePath = rootPath + "invalid.mice";
+                File noFile = new File(noFilePath);
+                Emporium emporium = onLoad(noFile);
+                // The block should not pass the line above
+                System.out.println("FAILED");
+            }
+            catch(Exception e) {
+                if(e instanceof FileNotFoundException || e instanceof IllegalArgumentException) {
+                    System.out.println("PASSED");
+                }
+                else {
+                    System.err.println("PASSED?");
+                    System.err.println(e);
+                }
+            }
         }
-        else {
+
+        {
+            System.out.print("[TEST 2] Valid file -> ");
+            Emporium emporium = new Emporium();
+
+            emporium.addContainer(container1);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addMixInFlavor(mixInFlavor1);
+
+            File testFile = new File(rootPath + "test2.mice");
+
+            Serving serving = new Serving(container1);
+
+            Scoop scoop1 = new Scoop(iceCream1);
+            MixIn mixIn1 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            scoop1.addMixIn(mixIn1);
+            serving.addScoop(scoop1);
+
+            Scoop scoop2 = new Scoop(iceCream1);
+            serving.addScoop(scoop2);
+
+            Scoop scoop3 = new Scoop(iceCream1);
+            MixIn mixIn3 = new MixIn(mixInFlavor1, MixInAmount.Normal);
+            MixIn mixIn3_2 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            scoop3.addMixIn(mixIn3);
+            scoop3.addMixIn(mixIn3_2);
+            serving.addScoop(scoop3);
+
+            Scoop scoop4 = new Scoop(iceCream1);
+            MixIn mixIn4 = new MixIn(mixInFlavor1, MixInAmount.Extra);
+            scoop4.addMixIn(mixIn4);
+            serving.addScoop(scoop4);
+            serving.addTopping(mixIn1);
+
+            Order order = new Order(person1);
+            order.addServing(serving);
+
+            emporium.addCustomer(person1);
+            emporium.addOrder(order);
+
+            onSave(testFile, emporium);
+
+            Emporium emporium2 = onLoad(testFile);
+
+            matchEmporium(emporium, emporium2);
+            System.out.println("PASSED");
+        }
+
+        {
+            System.out.print("[TEST 3] Giant valid file -> ");
+            Emporium emporium = new Emporium();
+
+            emporium.addContainer(container1);
+            emporium.addContainer(container2);
+            emporium.addContainer(container3);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addContainer(container1);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream2);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream2);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream1);
+            emporium.addIceCreamFlavor(iceCream3);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor2);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor3);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor2);
+            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addMixInFlavor(mixInFlavor3);
+
+            File testFile = new File(rootPath + "test3.mice");
+
+            Serving serving1 = new Serving(container1);
+            Serving serving2 = new Serving(container2);
+            Serving serving3 = new Serving(container3);
+
+            Scoop scoop1 = new Scoop(iceCream1);
+            MixIn mixIn1 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            scoop1.addMixIn(mixIn1);
+            serving1.addScoop(scoop1);
+
+            Scoop scoop2 = new Scoop(iceCream2);
+            serving1.addScoop(scoop2);
+
+            Scoop scoop3 = new Scoop(iceCream3);
+            MixIn mixIn3 = new MixIn(mixInFlavor1, MixInAmount.Normal);
+            MixIn mixIn3_2 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            scoop3.addMixIn(mixIn3);
+            scoop3.addMixIn(mixIn3_2);
+            serving1.addScoop(scoop3);
+
+            Scoop scoop4 = new Scoop(iceCream1);
+            MixIn mixIn4 = new MixIn(mixInFlavor1, MixInAmount.Extra);
+            scoop4.addMixIn(mixIn4);
+            serving1.addScoop(scoop4);
+            serving1.addTopping(mixIn1);
+
+            Order order = new Order(person1);
+            order.addServing(serving1);
+            order.addServing(serving1);
+            order.addServing(serving1);
+            order.addServing(serving2);
+            order.addServing(serving2);
+            order.addServing(serving2);
+            order.addServing(serving2);
+            order.addServing(serving3);
+            order.addServing(serving3);
+            order.addServing(serving3);
+            order.addServing(serving3);
+            order.addServing(serving3);
+
+            emporium.addCustomer(person1);
+            emporium.addCustomer(person2);
+            emporium.addCustomer(person3);
+            emporium.addCustomer(person1);
+            emporium.addCustomer(person2);
+            emporium.addOrder(order);
+            emporium.addOrder(order);
+            emporium.addOrder(order);
+
+            onSave(testFile, emporium);
+
+            Emporium emporium2 = onLoad(testFile);
+
+            matchEmporium(emporium, emporium2);
+
+            System.out.println("PASSED");
+        }
+
+
+    }
+
+    private static void matchEmporium(Emporium a, Emporium b) throws NoMatchException {
+        if(!a.equals(b)) {
             String errorFormat = "NoMatchException: Emporium a does not match Emporium b\n";
             throw new NoMatchException(errorFormat);
         }
     }
 
+    // Used to mimic onOpenClick()
     public static Emporium onLoad(File file) throws IOException {
-        try(BufferedReader rw = new BufferedReader(new FileReader(file))) {
+        LineNumberReader rw = new LineNumberReader(new FileReader(file));
+        try(rw) {
             String line = rw.readLine();
             if(!line.equals(MAGIC_COOKIE)) {
+                rw.close();
                 return null;
             }
-
             line = rw.readLine();
-            if(!(line.equals(FILE_VERSION))) {
+            if(!line.equals(FILE_VERSION)) {
+                rw.close();
                 return null;
             }
-
-            //rw.readLine();
             return new Emporium(rw);
         }
-        //catch(IOException e) {
-        //    errorFormat = e.getMessage();
-        //    System.err.println(errorFormat);
-        //    //System.exit(-1);
-        //}
+        catch(Exception e) {
+            System.err.println("ERROR");
+            System.err.println(e + " at line " + rw.getLineNumber());
+            rw.close();
+            return null;
+        }
     }
 
     public static void onSave(File file, Emporium emporium) {

@@ -21,7 +21,7 @@ public class Item {
         while(line.isBlank()) {
             line = in.readLine().trim();
         }
-        
+
         StringTokenizer st = new StringTokenizer(line, ";");
         String name = st.nextToken();
         String description = st.nextToken();
@@ -56,13 +56,13 @@ public class Item {
     public String toString() {
         return name;
     }
-    
+
     public String toStringDebug() {
         String nameStr = String.format("name: \"%s\"", name);
         String descriptionStr = String.format("description: \"%s\"", description);
         String costStr = String.format("cost: %d", cost);
         String priceStr = String.format("price: %d", price);
-        
+
         return String.join(", ", nameStr, descriptionStr, costStr, priceStr);
     }
 
