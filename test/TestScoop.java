@@ -130,8 +130,8 @@ public class TestScoop {
         IceCreamFlavor iceCream2 = new IceCreamFlavor("Chocolate", "Milk Chocolate", 3, 5);
         IceCreamFlavor iceCream3 = new IceCreamFlavor("Strawberry", "Iced strawberries", 6, 10);
         MixInFlavor mixInFlavor1 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
-        MixInFlavor mixInFlavor2 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
-        MixInFlavor mixInFlavor3 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
+        MixInFlavor mixInFlavor2 = new MixInFlavor("Oreo bits", "Bits of sandwich cookies", 2, 3);
+        MixInFlavor mixInFlavor3 = new MixInFlavor("Caramel syrup", "Caramel syrup", 1, 10000);
         Container container1 = new Container("Cup", "A plastic cup", 8);
         Container container2 = new Container("Waffle cone", "A cone made of waffle", 4);
         Container container3 = new Container("Large cup", "A large plastic cup", 10);
