@@ -875,7 +875,7 @@ public class MainWin extends JFrame {
     private JButton createOrdB;
 
     final static String MAGIC_COOKIE = "ꬺICƐ🧊🍨";
-    final static String FILE_VERSION = "1.1";
+    final static String FILE_VERSION = "1.2";
 
     private Emporium emporium;
     private JLabel display;

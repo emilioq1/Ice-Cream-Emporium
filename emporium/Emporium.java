@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 
 public class Emporium {
@@ -32,7 +31,7 @@ public class Emporium {
         if(tokens.length != 2) {
             throw new IOException("IceCreamFlavors: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        int size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int size = Integer.parseInt(tokens[1].strip());
         for(int i = 0; i < size; ++i) {
             iceCreamFlavors.add(new IceCreamFlavor(in));
         }
@@ -43,7 +42,7 @@ public class Emporium {
         if(tokens.length != 2) {
             throw new IOException("MixInFlavors: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        size = Integer.parseInt(tokens[1].strip());
         for(int i = 0; i < size; ++i) {
             mixInFlavors.add(new MixInFlavor(in));
         }
@@ -54,7 +53,7 @@ public class Emporium {
         if(tokens.length != 2) {
             throw new IOException("Containers: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        size = Integer.parseInt(tokens[1].strip());
         for(int i = 0; i < size; i++) {
             containers.add(new Container(in));
         }
@@ -64,7 +63,7 @@ public class Emporium {
         if(tokens.length != 2) {
             throw new IOException("Customers: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        size = Integer.parseInt(tokens[1].strip());
         for(int i = 0; i < size; i++) {
             customers.add(new Customer(in));
         }
@@ -74,7 +73,7 @@ public class Emporium {
         if(tokens.length != 2) {
             throw new IOException("Orders: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        size = Integer.parseInt(tokens[1].strip());
         for(int i = 0; i < size; i++) {
             orders.add(new Order(in));
             line = in.readLine().strip();

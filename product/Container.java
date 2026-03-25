@@ -3,7 +3,6 @@ package product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 
 public class Container {
@@ -27,7 +26,7 @@ public class Container {
 
         String name = tokens[0].strip();
         String description = tokens[1].strip();
-        int maxScoops = Optional.ofNullable(tokens[2].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int maxScoops = Integer.parseInt(tokens[2].strip());
 
         this(name, description, maxScoops);
     }

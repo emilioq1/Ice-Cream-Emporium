@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 
 public class Serving {
@@ -27,7 +26,7 @@ public class Serving {
             throw new IOException("Scoop: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
 
-        int size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int size = Integer.parseInt(tokens[1].strip());
 
         for(int i = 0; i < size; ++i) {
             this.scoops.add(new Scoop(in));
@@ -41,7 +40,7 @@ public class Serving {
         if(tokens.length != 2) {
             throw new IOException("Topping: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        size = Integer.parseInt(tokens[1].strip());
 
         for(int i = 0; i < size; ++i) {
             this.toppings.add(new MixIn(in));

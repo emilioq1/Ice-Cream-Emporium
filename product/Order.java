@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 import person.Customer;
 
@@ -30,9 +29,9 @@ public class Order {
         if(tokens.length != 2) {
             throw new IOException("Order: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
         }
-        int numServings = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int size = Integer.parseInt(tokens[1].strip());
 
-        for(int i = 0; i < numServings; ++i) {
+        for(int i = 0; i < size; ++i) {
             this.servings.add(new Serving(in));
         }
     }

@@ -3,7 +3,6 @@ package product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 
 public class Item {
@@ -28,8 +27,8 @@ public class Item {
 
         String name = tokens[0].strip();
         String description = tokens[1].strip();
-        int cost = Optional.ofNullable(tokens[2].strip()).map(str -> Integer.parseInt(str)).orElse(0);
-        int price = Optional.ofNullable(tokens[3].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int cost = Integer.parseInt(tokens[2].strip());
+        int price = Integer.parseInt(tokens[3].strip());
 
         this(name, description, cost, price);
     }

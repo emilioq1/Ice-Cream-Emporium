@@ -94,31 +94,31 @@ public class TestScoop {
     }
 
     final static String MAGIC_COOKIE = "ꬺICƐ🧊🍨";
-    final static String FILE_VERSION = "1.1";
+    final static String FILE_VERSION = "1.2";
 
     private static void testLoading() throws Exception {
         /*
         Happy Path Tests
-            - Load valid file – Load a well-formed file and verify all 5 lists are populated with the correct number of objects and correct field values.
-            - Load maximum data – Load a large file to ensure no truncation or performance issues.
-            - Load minimum data – Load a file with exactly one entry per list to confirm it doesn't require multiple records.
+            - Load valid file - Load a well-formed file and verify all 5 lists are populated with the correct number of objects and correct field values.
+            - Load maximum data - Load a large file to ensure no truncation or performance issues.
+            - Load minimum data - Load a file with exactly one entry per list to confirm it doesn't require multiple records.
         Empty / Missing Data Tests
-            - Empty file – Load a completely empty file and verify all lists are initialized as empty (not null).
-            - Empty section – Load a file where one or more lists (e.g., orders) have zero entries; verify other lists still load correctly.
-            - Missing file – Provide a path to a nonexistent file and verify a proper exception is thrown (not a silent failure or crash).
+            - Empty file - Load a completely empty file and verify all lists are initialized as empty (not null).
+            - Empty section - Load a file where one or more lists (e.g., orders) have zero entries; verify other lists still load correctly.
+            - Missing file - Provide a path to a nonexistent file and verify a proper exception is thrown (not a silent failure or crash).
         Data Integrity Tests
-            - Correct types – After loading, verify that objects in each list are the correct type (IceCreamFlavor, MixInFlavor, etc.), not just raw strings.
-            - Field accuracy – Spot-check specific fields on loaded objects (e.g., a flavor's name/price) against known values in the test file.
-            - List independence – Confirm that modifying one list after loading doesn't affect others (no shared references).
-            - Order references – If Order objects reference Customer, Container, or flavor objects, verify those references are correctly resolved after loading, not left as dangling IDs or nulls.
+            - Correct types - After loading, verify that objects in each list are the correct type (IceCreamFlavor, MixInFlavor, etc.), not just raw strings.
+            - Field accuracy - Spot-check specific fields on loaded objects (e.g., a flavor's name/price) against known values in the test file.
+            - List independence - Confirm that modifying one list after loading doesn't affect others (no shared references).
+            - Order references - If Order objects reference Customer, Container, or flavor objects, verify those references are correctly resolved after loading, not left as dangling IDs or nulls.
         Malformed Input Tests
-            - Corrupted data – Load a file with a malformed entry (e.g., a missing field or wrong data type) and verify graceful error handling.
-            - Extra/unknown fields – Load a file with extra fields or sections and confirm it doesn't crash or corrupt the valid data.
-            - Wrong file format – Pass a file of the wrong type (e.g., a .txt instead of the expected format) and verify a meaningful error.
+            - Corrupted data - Load a file with a malformed entry (e.g., a missing field or wrong data type) and verify graceful error handling.
+            - Extra/unknown fields - Load a file with extra fields or sections and confirm it doesn't crash or corrupt the valid data.
+            - Wrong file format - Pass a file of the wrong type (e.g., a .txt instead of the expected format) and verify a meaningful error.
         Boundary / Edge Case Tests
-            - Duplicate entries – Load a file with duplicate records and decide/verify whether they are both added or deduplicated.
-            - Special characters – Include flavor/customer names with spaces, apostrophes, or accented characters and verify they load correctly.
-            - Whitespace/blank lines – Include extra blank lines or trailing whitespace in the file and verify it doesn't break parsing.
+            - Duplicate entries - Load a file with duplicate records and decide/verify whether they are both added or deduplicated.
+            - Special characters - Include flavor/customer names with spaces, apostrophes, or accented characters and verify they load correctly.
+            - Whitespace/blank lines - Include extra blank lines or trailing whitespace in the file and verify it doesn't break parsing.
          */
         // Test Data
         String rootPath = System.getProperty("user.dir") + File.separator;
@@ -141,18 +141,13 @@ public class TestScoop {
             try {
                 String noFilePath = rootPath + "invalid.mice";
                 File noFile = new File(noFilePath);
-                Emporium emporium = onLoad(noFile);
+                onLoad(noFile);
                 // The block should not pass the line above
                 System.out.println("FAILED");
             }
             catch(Exception e) {
-                if(e instanceof FileNotFoundException || e instanceof IllegalArgumentException) {
-                    System.out.println("PASSED");
-                }
-                else {
-                    System.err.println("PASSED?");
-                    System.err.println(e);
-                }
+                System.err.println("PASSED");
+                System.err.println("\t" + e);
             }
         }
 
@@ -199,8 +194,13 @@ public class TestScoop {
 
             Emporium emporium2 = onLoad(testFile);
 
-            matchEmporium(emporium, emporium2);
-            System.out.println("PASSED");
+            if(matchEmporium(emporium, emporium2)) {
+                System.out.println("PASSED");
+            }
+            else {
+                System.out.println("FAILED");
+                throw new NoMatchException("NoMatchException: Emporium a does not match Emporium b");
+            }
         }
 
         {
@@ -292,62 +292,59 @@ public class TestScoop {
 
             Emporium emporium2 = onLoad(testFile);
 
-            matchEmporium(emporium, emporium2);
-
-            System.out.println("PASSED");
+            if(matchEmporium(emporium, emporium2)) {
+                System.out.println("PASSED");
+            }
+            else {
+                System.out.println("FAILED");
+                throw new NoMatchException("NoMatchException: Emporium a does not match Emporium b");
+            }
         }
 
         {
-            // Should fail
+            System.out.print("[TEST 4] File with extra unknown fields -> ");
             try {
-                System.out.print("[TEST 4] File with extra unknown fields -> ");
                 String filePath = rootPath + "test4.mice";
                 File file = new File(filePath);
-                Emporium emporium = onLoad(file);
+                onLoad(file);
                 // The block should not pass the line above
                 System.out.println("FAILED");
             }
             catch(Exception e) {
-                if(e instanceof IOException) {
-                    System.out.println("PASSED");
-                }
-                else {
-                    System.err.println("PASSED?");
-                    System.err.println(e);
-                }
+                System.out.println("PASSED");
+                System.err.println("\t" + e);
             }
         }
     }
 
-    private static void matchEmporium(Emporium a, Emporium b) throws NoMatchException {
-        if(!a.equals(b)) {
-            String errorFormat = "NoMatchException: Emporium a does not match Emporium b\n";
-            throw new NoMatchException(errorFormat);
-        }
+    private static boolean matchEmporium(Emporium a, Emporium b) throws NoMatchException {
+        return a.equals(b);
+        //if(!a.equals(b)) {
+            //String errorFormat = "NoMatchException: Emporium a does not match Emporium b\n";
+            //throw new NoMatchException(errorFormat);
+        //}
     }
 
     // Used to mimic onOpenClick()
     public static Emporium onLoad(File file) throws IOException {
         LineNumberReader rw = new LineNumberReader(new FileReader(file));
-        try(rw) {
-            String line = rw.readLine();
-            if(!line.equals(MAGIC_COOKIE)) {
-                rw.close();
-                return null;
-            }
-            line = rw.readLine();
-            if(!line.equals(FILE_VERSION)) {
-                rw.close();
-                return null;
-            }
-            return new Emporium(rw);
-        }
-        catch(Exception e) {
-            System.err.println("ERROR");
-            System.err.println(e + " at line " + rw.getLineNumber());
+        String line = rw.readLine();
+
+        if(!line.equals(MAGIC_COOKIE)) {
             rw.close();
-            return null;
+            throw new IOException("Magic cookie does not match.");
         }
+        line = rw.readLine();
+        if(!line.equals(FILE_VERSION)) {
+            rw.close();
+            throw new IOException("File version is not " + FILE_VERSION);
+        }
+
+        return new Emporium(rw);
+        //System.err.println("ERROR");
+        //System.err.println(e + " at line " + rw.getLineNumber());
+        //rw.close();
+        //return null;
     }
 
     public static void onSave(File file, Emporium emporium) {
