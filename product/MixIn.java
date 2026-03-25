@@ -13,7 +13,7 @@ public class MixIn {
 
     public MixIn(BufferedReader in) throws IOException {
         this.flavor = new MixInFlavor(in);
-        this.amount = MixInAmount.valueOf(in.readLine().trim());
+        this.amount = MixInAmount.valueOf(in.readLine().strip());
     }
 
     public void save(BufferedWriter out) throws IOException {
@@ -37,11 +37,11 @@ public class MixIn {
     public String toStringDebug() {
         String flavorStr = String.format("flavor: (%s)", flavor.toStringDebug());
         String amountStr = String.format("amount: %s", amount.toString());
-        
+
         return String.join(", ", flavorStr, amountStr);
     }
 
-    
+
     @Override
     public boolean equals(Object o) {
         if(this == o) {
@@ -54,7 +54,7 @@ public class MixIn {
 
         boolean flavorEquals = this.flavor.equals(mixIn.flavor);
         boolean amountEquals = this.amount.equals(mixIn.amount);
-        
+
         return flavorEquals && amountEquals;
     }
 

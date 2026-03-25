@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.StringTokenizer;
 
 
 public class Container {
@@ -15,17 +14,20 @@ public class Container {
     }
 
     public Container(BufferedReader in) throws IOException {
-        String line = in.readLine().trim();
+        String line = in.readLine().strip();
         if(line.isBlank()) {
             throw new IOException(
                     "Loading container from file failed: expected \"{name: str};{description: str};{maxScoops: int}\", got \"\".");
         }
-        StringTokenizer st = new StringTokenizer(line, ";");
 
+        String[] tokens = line.split(";", -1);
+        if(tokens.length != 3) {
+            throw new IOException("Container: 3 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
 
-        String name = st.nextToken();
-        String description = st.nextToken();
-        int maxScoops = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String name = tokens[0].strip();
+        String description = tokens[1].strip();
+        int maxScoops = Optional.ofNullable(tokens[2].strip()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, maxScoops);
     }
@@ -39,12 +41,12 @@ public class Container {
     public String toString() {
         return name;
     }
-    
+
     public String toStringDebug() {
         String nameStr = String.format("name: \"%s\"", name);
         String descriptionStr = String.format("description: \"%s\"", description);
         String maxScoopsStr = String.format("maxScoops: %d", maxScoops);
-        
+
         return String.join(", ", nameStr, descriptionStr, maxScoopsStr);
     }
 

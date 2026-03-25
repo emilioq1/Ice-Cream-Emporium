@@ -3,7 +3,6 @@ package product;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.StringTokenizer;
 import java.util.Optional;
 
 
@@ -16,17 +15,21 @@ public class Item {
     }
 
     public Item(BufferedReader in) throws IOException {
-        String line = in.readLine().trim();
+        String line = in.readLine().strip();
         // Handles the blank line after each item.
         while(line.isBlank()) {
-            line = in.readLine().trim();
+            line = in.readLine().strip();
         }
 
-        StringTokenizer st = new StringTokenizer(line, ";");
-        String name = st.nextToken();
-        String description = st.nextToken();
-        int cost = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-        int price = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String[] tokens = line.split(";", -1);
+        if(tokens.length != 4) {
+            throw new IOException("Item: 4 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+
+        String name = tokens[0].strip();
+        String description = tokens[1].strip();
+        int cost = Optional.ofNullable(tokens[2].strip()).map(str -> Integer.parseInt(str)).orElse(0);
+        int price = Optional.ofNullable(tokens[3].strip()).map(str -> Integer.parseInt(str)).orElse(0);
 
         this(name, description, cost, price);
     }

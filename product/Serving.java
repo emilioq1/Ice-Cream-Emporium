@@ -1,7 +1,6 @@
 package product;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -21,11 +20,14 @@ public class Serving {
 
         this.container = new Container(in);
 
-        String line = in.readLine().trim();
+        String line = in.readLine().strip();
 
-        StringTokenizer st = new StringTokenizer(line, ";");
-        st.nextToken(); // Skip identifier
-        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String[] tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Scoop: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+
+        int size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
 
         for(int i = 0; i < size; ++i) {
             this.scoops.add(new Scoop(in));
@@ -34,14 +36,17 @@ public class Serving {
         // Skip blank line
         in.readLine();
         line = in.readLine();
-        st = new StringTokenizer(line, ";");
-        st.nextToken(); // Skip identifier
-        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Topping: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
 
         for(int i = 0; i < size; ++i) {
             this.toppings.add(new MixIn(in));
         }
-        line = in.readLine().trim();
+        line = in.readLine().strip();
     }
 
     public void save(BufferedWriter out) throws IOException {

@@ -8,7 +8,6 @@ import product.Order;
 import person.Customer;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,47 +26,58 @@ public class Emporium {
     public Emporium(BufferedReader in) throws IOException {
         this();
 
-        String line = in.readLine().trim();
+        String line = in.readLine().strip();
 
-        StringTokenizer st = new StringTokenizer(line, ";");
-        st.nextToken();
-        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-
+        String[] tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("IceCreamFlavors: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        int size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; ++i) {
             iceCreamFlavors.add(new IceCreamFlavor(in));
         }
-        line = in.readLine().trim();
+        line = in.readLine().strip();
 
-        st = new StringTokenizer(line, ";");
-        st.nextToken();
-        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("MixInFlavors: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; ++i) {
             mixInFlavors.add(new MixInFlavor(in));
         }
-        line = in.readLine().trim();
+        line = in.readLine().strip();
 
-        st = new StringTokenizer(line, ";");
-        st.nextToken();
-        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+
+        tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Containers: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             containers.add(new Container(in));
         }
-        line = in.readLine().trim();
+        line = in.readLine().strip();
 
-        st = new StringTokenizer(line, ";");
-        st.nextToken();
-        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Customers: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             customers.add(new Customer(in));
         }
-        line = in.readLine().trim();
+        line = in.readLine().strip();
 
-        st = new StringTokenizer(line, ";");
-        st.nextToken();
-        size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Orders: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             orders.add(new Order(in));
-            line = in.readLine().trim();
+            line = in.readLine().strip();
         }
     }
 

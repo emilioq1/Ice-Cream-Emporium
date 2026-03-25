@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.StringTokenizer;
 import java.util.Optional;
 
 
@@ -19,11 +18,13 @@ public class Scoop {
         this.flavor = new IceCreamFlavor(in);
         this.mixins = new ArrayList<MixIn>();
 
-        String line = in.readLine().trim();
+        String line = in.readLine().strip();
 
-        StringTokenizer st = new StringTokenizer(line, ";");
-        st.nextToken(); // Skip identifier
-        int size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
+        String[] tokens = line.split(";", -1);
+        if(tokens.length != 2) {
+            throw new IOException("Scoop: 2 tokens were expected. Got " + tokens.length + " tokens instead.");
+        }
+        int size = Optional.ofNullable(tokens[1].strip()).map(str -> Integer.parseInt(str)).orElse(0);
 
         for(int i = 0; i < size; ++i) {
             this.mixins.add(new MixIn(in));
@@ -69,7 +70,7 @@ public class Scoop {
 
     public String toStringDebug() {
         String flavorStr = String.format("flavor: (%s)", flavor.toStringDebug());
-        
+
         StringBuilder mixinsStr = new StringBuilder();
         mixinsStr.append("mixins: [");
         ArrayList<String> mixinsList = new ArrayList<>();
@@ -94,7 +95,7 @@ public class Scoop {
 
         boolean flavorEquals = this.flavor.equals(scoop.flavor);
         boolean mixinsEquals = this.mixins.equals(scoop.mixins);
-        
+
         return flavorEquals && mixinsEquals;
     }
 
