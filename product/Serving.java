@@ -41,6 +41,7 @@ public class Serving {
         for(int i = 0; i < size; ++i) {
             this.toppings.add(new MixIn(in));
         }
+        line = in.readLine().trim();
     }
 
     public void save(BufferedWriter out) throws IOException {
@@ -56,6 +57,7 @@ public class Serving {
             s.save(out);
             out.newLine();
         }
+        if(scoops.isEmpty()) out.newLine();
 
         out.write("\t\t\t");
         out.write("Toppings;" + toppings.size());

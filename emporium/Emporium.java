@@ -35,32 +35,32 @@ public class Emporium {
 
         for(int i = 0; i < size; ++i) {
             iceCreamFlavors.add(new IceCreamFlavor(in));
-            line = in.readLine().trim();
         }
+        line = in.readLine().trim();
 
         st = new StringTokenizer(line, ";");
         st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; ++i) {
             mixInFlavors.add(new MixInFlavor(in));
-            line = in.readLine().trim();
         }
+        line = in.readLine().trim();
 
         st = new StringTokenizer(line, ";");
         st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             containers.add(new Container(in));
-            line = in.readLine().trim();
         }
+        line = in.readLine().trim();
 
         st = new StringTokenizer(line, ";");
         st.nextToken();
         size = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
         for(int i = 0; i < size; i++) {
             customers.add(new Customer(in));
-            line = in.readLine().trim();
         }
+        line = in.readLine().trim();
 
         st = new StringTokenizer(line, ";");
         st.nextToken();

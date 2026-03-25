@@ -30,7 +30,7 @@ public class Order {
         StringTokenizer st = new StringTokenizer(line, ";");
         st.nextToken(); // Skip identifier
         int numServings = Optional.ofNullable(st.nextToken()).map(str -> Integer.parseInt(str)).orElse(0);
-        
+
         for(int i = 0; i < numServings; ++i) {
             this.servings.add(new Serving(in));
         }

@@ -21,7 +21,8 @@ public class Person {
 
 
         String name = st.nextToken();
-        String phone = st.nextToken();
+        String phone = "";
+        try { phone = st.nextToken(); } catch(Exception e) {}
 
         this(name, phone);
     }
