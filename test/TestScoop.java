@@ -119,9 +119,6 @@ public class TestScoop {
             - Duplicate entries – Load a file with duplicate records and decide/verify whether they are both added or deduplicated.
             - Special characters – Include flavor/customer names with spaces, apostrophes, or accented characters and verify they load correctly.
             - Whitespace/blank lines – Include extra blank lines or trailing whitespace in the file and verify it doesn't break parsing.
-        Re-load Tests
-            - Load twice – Call the load method twice and verify the lists are replaced (not doubled) on the second load.
-            - Load after modification – Manually add an item to a list, then reload from file, and confirm the list reflects only the file's contents.
          */
         // Test Data
         String rootPath = System.getProperty("user.dir") + File.separator;
@@ -300,7 +297,26 @@ public class TestScoop {
             System.out.println("PASSED");
         }
 
-
+        {
+            // Should fail
+            try {
+                System.out.print("[TEST 4] File with extra unknown fields -> ");
+                String filePath = rootPath + "test4.mice";
+                File file = new File(filePath);
+                Emporium emporium = onLoad(file);
+                // The block should not pass the line above
+                System.out.println("FAILED");
+            }
+            catch(Exception e) {
+                if(e instanceof IOException) {
+                    System.out.println("PASSED");
+                }
+                else {
+                    System.err.println("PASSED?");
+                    System.err.println(e);
+                }
+            }
+        }
     }
 
     private static void matchEmporium(Emporium a, Emporium b) throws NoMatchException {
