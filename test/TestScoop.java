@@ -1,9 +1,7 @@
 package test;
 
 import java.io.BufferedWriter;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
@@ -123,18 +121,34 @@ public class TestScoop {
         // Test Data
         String rootPath = System.getProperty("user.dir") + File.separator;
 
-        IceCreamFlavor iceCream1 = new IceCreamFlavor("Vanilla", "Plain old Vanilla", 1, 2);
-        IceCreamFlavor iceCream2 = new IceCreamFlavor("Chocolate", "Milk Chocolate", 3, 5);
-        IceCreamFlavor iceCream3 = new IceCreamFlavor("Strawberry", "Iced strawberries", 6, 10);
-        MixInFlavor mixInFlavor1 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
-        MixInFlavor mixInFlavor2 = new MixInFlavor("Oreo bits", "Bits of sandwich cookies", 2, 3);
-        MixInFlavor mixInFlavor3 = new MixInFlavor("Caramel syrup", "Caramel syrup", 1, 10000);
-        Container container1 = new Container("Cup", "A plastic cup", 8);
-        Container container2 = new Container("Waffle cone", "A cone made of waffle", 4);
-        Container container3 = new Container("Large cup", "A large plastic cup", 10);
+        IceCreamFlavor validIceCream1 = new IceCreamFlavor("Vanilla", "Plain old Vanilla", 1, 2);
+        IceCreamFlavor validIceCream2 = new IceCreamFlavor("Chocolate", "Milk Chocolate", 3, 5);
+        IceCreamFlavor validIceCream3 = new IceCreamFlavor("Strawberry", "Iced strawberries", 6, 10);
+        IceCreamFlavor iceCreamMissing1 = new IceCreamFlavor("", "Iced strawberries", 6, 10);
+        IceCreamFlavor iceCreamMissing2 = new IceCreamFlavor("Strawberry", "", 6, 10);
+        IceCreamFlavor iceCreamMissing3 = new IceCreamFlavor("Strawberry", "Iced strawberries", -1, 10);
+        IceCreamFlavor iceCreamMissing4 = new IceCreamFlavor("Strawberry", "Iced strawberries", 6, -1);
+
+        MixInFlavor validMixInFlavor1 = new MixInFlavor("Sprinkles", "Colorful pallets of sugar", 1, 1);
+        MixInFlavor validMixInFlavor2 = new MixInFlavor("Oreo bits", "Bits of sandwich cookies", 2, 3);
+        MixInFlavor validMixInFlavor3 = new MixInFlavor("Caramel syrup", "Caramel syrup", 1, 10000);
+        MixInFlavor mixInFlavorMissing1 = new MixInFlavor("", "Caramel syrup", 1, 10000);
+        MixInFlavor mixInFlavorMissing2 = new MixInFlavor("Caramel syrup", "", 1, 10000);
+        MixInFlavor mixInFlavorMissing3 = new MixInFlavor("Caramel syrup", "Caramel syrup", -1, 10000);
+        MixInFlavor mixInFlavorMissing4 = new MixInFlavor("Caramel syrup", "Caramel syrup", 1, -10000);
+
+        Container validContainer1 = new Container("Cup", "A plastic cup", 8);
+        Container validContainer2 = new Container("Waffle cone", "A cone made of waffle", 4);
+        Container validContainer3 = new Container("Large cup", "A large plastic cup", 10);
+        Container containerMissing1 = new Container("", "A large plastic cup", 10);
+        Container containerMissing2 = new Container("Large cup", "", 10);
+        Container containerMissing3 = new Container("Large cup", "A large plastic cup", -1);
+
         Customer person1 = new Customer("Billy", "1928312213");
-        Customer person2 = new Customer("John", "");
+        Customer person2 = new Customer("John", "9381823711");
         Customer person3 = new Customer("Sally", "10938176629");
+        Customer personMissing1 = new Customer("", "10938176629");
+        Customer personMissing2 = new Customer("Sally", "");
 
         {
             System.out.print("[TEST 1] Non-existent file -> ");
@@ -155,31 +169,31 @@ public class TestScoop {
             System.out.print("[TEST 2] Valid file -> ");
             Emporium emporium = new Emporium();
 
-            emporium.addContainer(container1);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addMixInFlavor(mixInFlavor1);
+            emporium.addContainer(validContainer1);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addMixInFlavor(validMixInFlavor1);
 
             File testFile = new File(rootPath + "test2.mice");
 
-            Serving serving = new Serving(container1);
+            Serving serving = new Serving(validContainer1);
 
-            Scoop scoop1 = new Scoop(iceCream1);
-            MixIn mixIn1 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            Scoop scoop1 = new Scoop(validIceCream1);
+            MixIn mixIn1 = new MixIn(validMixInFlavor1, MixInAmount.Light);
             scoop1.addMixIn(mixIn1);
             serving.addScoop(scoop1);
 
-            Scoop scoop2 = new Scoop(iceCream1);
+            Scoop scoop2 = new Scoop(validIceCream1);
             serving.addScoop(scoop2);
 
-            Scoop scoop3 = new Scoop(iceCream1);
-            MixIn mixIn3 = new MixIn(mixInFlavor1, MixInAmount.Normal);
-            MixIn mixIn3_2 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            Scoop scoop3 = new Scoop(validIceCream1);
+            MixIn mixIn3 = new MixIn(validMixInFlavor1, MixInAmount.Normal);
+            MixIn mixIn3_2 = new MixIn(validMixInFlavor1, MixInAmount.Light);
             scoop3.addMixIn(mixIn3);
             scoop3.addMixIn(mixIn3_2);
             serving.addScoop(scoop3);
 
-            Scoop scoop4 = new Scoop(iceCream1);
-            MixIn mixIn4 = new MixIn(mixInFlavor1, MixInAmount.Extra);
+            Scoop scoop4 = new Scoop(validIceCream1);
+            MixIn mixIn4 = new MixIn(validMixInFlavor1, MixInAmount.Extra);
             scoop4.addMixIn(mixIn4);
             serving.addScoop(scoop4);
             serving.addTopping(mixIn1);
@@ -207,60 +221,60 @@ public class TestScoop {
             System.out.print("[TEST 3] Giant valid file -> ");
             Emporium emporium = new Emporium();
 
-            emporium.addContainer(container1);
-            emporium.addContainer(container2);
-            emporium.addContainer(container3);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addContainer(container1);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream2);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream2);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream1);
-            emporium.addIceCreamFlavor(iceCream3);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor2);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor3);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor2);
-            emporium.addMixInFlavor(mixInFlavor1);
-            emporium.addMixInFlavor(mixInFlavor3);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer2);
+            emporium.addContainer(validContainer3);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addContainer(validContainer1);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream2);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream2);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream1);
+            emporium.addIceCreamFlavor(validIceCream3);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor2);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor3);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor2);
+            emporium.addMixInFlavor(validMixInFlavor1);
+            emporium.addMixInFlavor(validMixInFlavor3);
 
             File testFile = new File(rootPath + "test3.mice");
 
-            Serving serving1 = new Serving(container1);
-            Serving serving2 = new Serving(container2);
-            Serving serving3 = new Serving(container3);
+            Serving serving1 = new Serving(validContainer1);
+            Serving serving2 = new Serving(validContainer2);
+            Serving serving3 = new Serving(validContainer3);
 
-            Scoop scoop1 = new Scoop(iceCream1);
-            MixIn mixIn1 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            Scoop scoop1 = new Scoop(validIceCream1);
+            MixIn mixIn1 = new MixIn(validMixInFlavor1, MixInAmount.Light);
             scoop1.addMixIn(mixIn1);
             serving1.addScoop(scoop1);
 
-            Scoop scoop2 = new Scoop(iceCream2);
+            Scoop scoop2 = new Scoop(validIceCream2);
             serving1.addScoop(scoop2);
 
-            Scoop scoop3 = new Scoop(iceCream3);
-            MixIn mixIn3 = new MixIn(mixInFlavor1, MixInAmount.Normal);
-            MixIn mixIn3_2 = new MixIn(mixInFlavor1, MixInAmount.Light);
+            Scoop scoop3 = new Scoop(validIceCream3);
+            MixIn mixIn3 = new MixIn(validMixInFlavor1, MixInAmount.Normal);
+            MixIn mixIn3_2 = new MixIn(validMixInFlavor1, MixInAmount.Light);
             scoop3.addMixIn(mixIn3);
             scoop3.addMixIn(mixIn3_2);
             serving1.addScoop(scoop3);
 
-            Scoop scoop4 = new Scoop(iceCream1);
-            MixIn mixIn4 = new MixIn(mixInFlavor1, MixInAmount.Extra);
+            Scoop scoop4 = new Scoop(validIceCream1);
+            MixIn mixIn4 = new MixIn(validMixInFlavor1, MixInAmount.Extra);
             scoop4.addMixIn(mixIn4);
             serving1.addScoop(scoop4);
             serving1.addTopping(mixIn1);
@@ -315,13 +329,71 @@ public class TestScoop {
                 System.err.println("\t" + e);
             }
         }
+
+        {
+            System.out.println("[TEST 5] File with missing fields -> ");
+            System.out.println("IceCreamFlavor -> ");
+
+            // Create the file
+            Emporium emporium = new Emporium();
+            emporium.addContainer(validContainer1);
+            emporium.addIceCreamFlavor(validIceCream2);
+            ///----------------------------------------------------------------------------------------------------///
+            emporium.addIceCreamFlavor(iceCreamMissing1);
+            ///----------------------------------------------------------------------------------------------------///
+            emporium.addIceCreamFlavor(validIceCream3);
+            emporium.addMixInFlavor(validMixInFlavor1);
+
+            File testFile = new File(rootPath + "test5.mice");
+
+            Serving serving = new Serving(validContainer1);
+
+            Scoop scoop1 = new Scoop(validIceCream1);
+            MixIn mixIn1 = new MixIn(validMixInFlavor1, MixInAmount.Light);
+            scoop1.addMixIn(mixIn1);
+            serving.addScoop(scoop1);
+
+            Scoop scoop2 = new Scoop(validIceCream1);
+            serving.addScoop(scoop2);
+
+            Scoop scoop3 = new Scoop(validIceCream1);
+            MixIn mixIn3 = new MixIn(validMixInFlavor1, MixInAmount.Normal);
+            MixIn mixIn3_2 = new MixIn(validMixInFlavor1, MixInAmount.Light);
+            scoop3.addMixIn(mixIn3);
+            scoop3.addMixIn(mixIn3_2);
+            serving.addScoop(scoop3);
+
+            Scoop scoop4 = new Scoop(validIceCream1);
+            MixIn mixIn4 = new MixIn(validMixInFlavor1, MixInAmount.Extra);
+            scoop4.addMixIn(mixIn4);
+            serving.addScoop(scoop4);
+            serving.addTopping(mixIn1);
+
+            Order order = new Order(person1);
+            order.addServing(serving);
+
+            emporium.addCustomer(person1);
+            emporium.addOrder(order);
+
+            onSave(testFile, emporium);
+
+            try {
+                Emporium emporium2 = onLoad(testFile);
+            }
+            catch(Exception e) {
+                System.out.println("PASSED");
+                System.out.println("\t" + e);
+            }
+            System.out.println("FAILED");
+        }
+
     }
 
     private static boolean matchEmporium(Emporium a, Emporium b) throws NoMatchException {
         return a.equals(b);
         //if(!a.equals(b)) {
-            //String errorFormat = "NoMatchException: Emporium a does not match Emporium b\n";
-            //throw new NoMatchException(errorFormat);
+        //String errorFormat = "NoMatchException: Emporium a does not match Emporium b\n";
+        //throw new NoMatchException(errorFormat);
         //}
     }
 
